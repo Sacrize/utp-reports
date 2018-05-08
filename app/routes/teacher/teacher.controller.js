@@ -58,9 +58,11 @@ module.exports = (router) => {
                 if (Boolean(semester) === false) {
                     semester = {
                         name: exercise.semester,
+                        exercises: Array(),
                     };
                     typeOfStudy.semesters.push(semester);
                 }
+                semester.exercises.push(String(exercise._id));
             });
 
             res.renderVue("teacher/teacher.vue", data, req.vueOptions);

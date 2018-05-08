@@ -35,6 +35,7 @@ module.exports.init = (app, config) => {
                 { src: 'assets/dependencies/jquery.slim.min.js' },
                 { src: 'assets/dependencies/popper.min.js' },
                 { src: 'assets/dependencies/bootstrap/bootstrap.min.js' },
+                { src: 'assets/dependencies/axios.min.js' },
             ],
             styles: [
                 { style: "assets/dependencies/bootstrap/bootstrap.min.css" },
