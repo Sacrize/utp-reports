@@ -11,6 +11,7 @@ const helmet = require("helmet");
 const validator = require("express-validator");
 const expressVue = require("express-vue");
 const path = require("path");
+const mongoose = require("mongoose");
 
 /**
  *
@@ -30,9 +31,19 @@ module.exports.init = (app, config) => {
     const vueOptions = {
         rootPath: path.join(__dirname, "routes"),
         head: {
-            styles: [{ style: "assets/rendered/style.css" }],
+            scripts:[
+                { src: 'assets/dependencies/jquery.slim.min.js' },
+                { src: 'assets/dependencies/popper.min.js' },
+                { src: 'assets/dependencies/bootstrap/bootstrap.min.js' },
+            ],
+            styles: [
+                { style: "assets/dependencies/bootstrap/bootstrap.min.css" },
+                { style: "assets/rendered/style.css" }
+            ],
         },
     };
+
+    mongoose.connect(process.env.MONGODB_URI || '');
 
     // @ts-ignore
     const expressVueMiddleware = expressVue.init(vueOptions);
