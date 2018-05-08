@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="javascript:">Sprawozdania</a>
+        <a class="navbar-brand" href="http://www.utp.edu.pl">UTP</a>
         <span class="navbar-text">
             
         </span>
@@ -9,8 +9,8 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-
+            <ul class="navbar-nav ml-auto">
+                <slot name="right-menu"></slot>
             </ul>
         </div>
     </nav>
