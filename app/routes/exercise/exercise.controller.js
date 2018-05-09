@@ -8,14 +8,14 @@ const {isAuthenticated} = require("../../middleware");
  * @param {object} router
  */
 module.exports = (router) => {
-    router.post("/exercises",
+    router.get("/exercise",
         isAuthenticated,
         /**
          * @param {object} req
          * @param {object} res
          */
         async (req, res) => {
-            let ids = req.body.ids;
+            let ids = req.query.ids;
             
             if (_.isArray(ids) === false) {
                 return res.status(400).send("bad request");

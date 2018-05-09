@@ -126,70 +126,27 @@
             </div>
         </div>
     </section>
-    <!-- Modal -->
-    <div class="modal fade" id="createExerciseModal" tabindex="-1" role="dialog" >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Dodaj ćwiczenie</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning" v-if="loading">
-                        <img src="/static/loader.svg" />
-                        Trwa dodawanie, poczekaj jeszcze chwilę.
-                    </div>
-                    <div class="alert alert-success" v-if="status === 'success'">
-                        Ćwiczenie zostało dodane pomyślnie.
-                    </div>
-                    <div class="alert alert-danger" v-else-if="status === 'error'">
-                        Coś poszło nie tak.
-                    </div>
-                    <form v-on:submit.prevent="onSubmit">
-                        <div class="form-group">
-                            <label for="selectExistingClass">Klasa</label>
-                            <select class="form-control" id="selectExistingClass" v-model="exercise.class">
-                            <option 
-                                v-for="studentClass in classes" 
-                                v-bind:key="studentClass.uid" 
-                                v-bind:value="studentClass.uid"
-                            >{{ studentClass.name }}</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="nameOfExercise">Nazwa</label>
-                            <input type="text" class="form-control" id="nameOfExercise" placeholder="np. Ćwiczenie 1" v-model="exercise.name">
-                        </div>
-                        <div class="form-group">
-                            <label for="descriptionOfExercise">Opis</label>
-                            <textarea class="form-control" id="descriptionOfExercise" rows="3" v-model="exercise.description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="attachmentOfExercise">Załącznik</label>
-                            <input type="file" class="form-control-file" id="attachmentOfExercise">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Zapisz</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <create-exercise-modal 
+        :classes="classes">
+    </create-exercise-modal>
+
 </div>
 </template>
 
 <script>
 import navbar from "../navbar.vue";
+import createExercise from "../components/createExercise.component.vue";
 export default {
     components: {
-        "navbar-for-logged": navbar
+        "navbar-for-logged": navbar,
+        "create-exercise-modal": createExercise,
     },
     data: function() {
         return {
             branches: Array(),
             exercises: Array(),
+            classes: Array(),
             loading: false,
             exercise: { /* new exercise */ },
         };
@@ -197,7 +154,7 @@ export default {
     methods: {
         getExercises(ids) {
             this.loading = true;
-            axios.post("http://localhost:9000/exercises", { ids }).then(
+            axios.get("http://localhost:9000/exercise", { params: {ids} }).then(
                 response => {
                     this.loading = false;
                     this.statusExercises = "success";
@@ -219,6 +176,7 @@ export default {
             );
         },
         readExerciseById(id) {
+            console.log(this.exercises);
             return this.exercises.find(v => v._id === id) || {};
         }
     },
@@ -229,12 +187,13 @@ export default {
 </script>
 
 <style scoped>
-.card button.card-header {
+#tree button.card-header {
   font-size: 0.7rem;
   overflow: hidden;
   text-align: left;
 }
-.card-body {
+
+#tree .card-body {
   padding: 0;
 }
 

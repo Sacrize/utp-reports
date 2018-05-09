@@ -3,7 +3,6 @@
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const Exercise = mongoose.model("Exercise");
-const Class = mongoose.model("Class");
 const {isAuthenticated} = require("../../middleware");
 const {isTeacher} = require("../../middleware");
 
@@ -28,15 +27,16 @@ module.exports = (router) => {
                 .exec();
 
             // drzewko
-            data.branches = Array();
+            let branches = Array();
+
             exercises.map(exercise => {
-                let branch = _.find(data.branches, o => o.name === exercise.branch);
+                let branch = _.find(branches, o => o.name === exercise.branch);
                 if (Boolean(branch) === false) {
                     branch = {
                         name: exercise.branch,
                         specializations: Array(),
                     };
-                    data.branches.push(branch);
+                    branches.push(branch);
                 }
                 let specialization = _.find(branch.specializations, o => o.name === exercise.specialization);
                 if (Boolean(specialization) === false) {
@@ -65,6 +65,27 @@ module.exports = (router) => {
                 semester.exercises.push(String(exercise._id));
             });
 
+            data.branches = branches;
+
+            let classes = [
+                { 
+                    _id: 1,
+                    branch: "Wydział Telekomunikacji, Informatyki i Elektrotechniki ",
+                    speciailization: "Informatyka stosowana",
+                    typeOfStudy: "Studia Niestacjonarne Pierwszego Stopnia",
+                    semester: "Rok 1 Semestr I (zimowy) rok akademicki 2017/2018",
+                },
+                { 
+                    _id: 2,
+                    branch: "Wydział Telekomunikacji, Informatyki i Elektrotechniki ",
+                    speciailization: "Informatyka stosowana",
+                    typeOfStudy: "Studia Niestacjonarne Pierwszego Stopnia",
+                    semester: "Rok 1 Semestr II (letni) rok akademicki 2017/2018",
+                }
+            ];
+
+            data.classes = classes;
+            
             res.renderVue("teacher/teacher.vue", data, req.vueOptions);
         },
     );

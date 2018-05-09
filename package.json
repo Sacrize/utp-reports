@@ -38,6 +38,7 @@
         ]
     },
     "dependencies": {
+        "@tinymce/tinymce-vue": "^1.0.7",
         "@types/lodash": "^4.14.108",
         "@types/mongoose": "^5.0.12",
         "@types/uuid": "^3.4.3",
