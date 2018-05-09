@@ -16,6 +16,7 @@ module.exports = (router) => {
                     _id: "5ab13f0201182942038b9a74",
                     role: "student",
                     name: "Jan Kowalski",
+                    index: "12",
                     // e.g the student can study many specializations
                     school: [
                         { 

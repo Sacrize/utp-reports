@@ -28,8 +28,10 @@ module.exports = (router) => {
             try {
 
                 let reports = await Report.find()
-                    .where({ exercise: exercise, });
+                    .where({ exercise: exercise, })
+                    .sort({createdAt: "desc"});
 
+                reports = _.uniqBy(reports, "studentIndex");
                 return res.status(200).json(reports);
                 
             } catch (error) {
@@ -55,7 +57,8 @@ module.exports = (router) => {
             try {
 
                 let reports = await Report.find()
-                    .where({ exercise: exercise, });
+                    .where({ exercise: exercise, })
+                    .sort({createdAt: 'desc'});
 
                 return res.status(200).json(reports);
                 
@@ -79,12 +82,31 @@ module.exports = (router) => {
             let report = new Report({
                 _id: new mongoose.Types.ObjectId(),
                 studentName: req.session.user.name,
+                studentIndex: req.session.user.index,
                 exercise: exercise,
             });
             
             try {
 
                 await report.save();
+
+                let test = await Report.find({
+                    _id: { $ne: report._id, },
+                    studentIndex: report.studentIndex,
+                    exercise: report.exercise,
+                }).exec();
+                console.log(test)
+
+                await Report.update({
+                    _id: { $ne: report._id, },
+                    studentIndex: report.studentIndex,
+                    exercise: report.exercise,
+                }, {
+                    $set: { status: 'deprecated' }
+                }, { 
+                    multi: true 
+                });
+
                 return res.status(200).json(report);
                 
             } catch (error) {

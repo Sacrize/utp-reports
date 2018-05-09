@@ -40,12 +40,12 @@
                                                 </button>
                                                 <div class="card-body collapse" :id="`tree-${index1}-${index2}-${index3}-${index4}`">
                                                     <div class="card" v-for="exerciseId in semester.exercises" v-bind:key="exerciseId">
-                                                        <div class="card-body">
+                                                        <button class="card-body btn btn-link" v-on:click.prevent="showExerciseById = exerciseId">
                                                             <div class="d-flex justify-content-between">
-                                                                <span>{{ readExerciseById(exerciseId).name }} <small>(4 / 20)</small></span>
-                                                                <small>12.10.2017</small>
+                                                                <small>{{ readExerciseById(exerciseId).name }}</small>
+                                                                <small>{{ readExerciseById(exerciseId).createdAt }}</small>
                                                             </div>
-                                                        </div>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -64,7 +64,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div id="list">
-                                <div class="d-flex justify-content-end">
+                                <div class="d-flex justify-content-end" v-if="false">
                                     <div class="dropdown">
                                     <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
                                         Sortuj
@@ -79,34 +79,10 @@
 
                                 <div id="list-reports">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item bg-light">
+                                        <li class="list-group-item bg-light" v-for="report in reports" v-bind:key="report._id">
                                             <div class="d-flex justify-content-between">
-                                                <h5>Uczeń: Jan Kowalski</h5>
-                                                <small>20.12.2018</small>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-link btn-sm">Oceń</button>
-                                                <button class="btn btn-link btn-sm">Pobierz</button>
-                                                <button class="btn btn-link btn-sm">Odrzuć</button>
-                                                <button class="btn btn-link btn-sm">Akceptuj</button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item bg-light">
-                                            <div class="d-flex justify-content-between">
-                                                <h5>Uczeń: Jan Kowalski</h5>
-                                                <small>20.12.2018</small>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-link btn-sm">Oceń</button>
-                                                <button class="btn btn-link btn-sm">Pobierz</button>
-                                                <button class="btn btn-link btn-sm">Odrzuć</button>
-                                                <button class="btn btn-link btn-sm">Akceptuj</button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item bg-light">
-                                            <div class="d-flex justify-content-between">
-                                                <h5>Uczeń: Jan Kowalski</h5>
-                                                <small>20.12.2018</small>
+                                                <div>{{ report.studentName }} <small class="text-muted">{{report.studentIndex}}</small></div>
+                                                <small>{{ report.createdAt }}</small>
                                             </div>
                                             <div class="d-flex justify-content-end">
                                                 <button class="btn btn-link btn-sm">Oceń</button>
@@ -147,41 +123,76 @@ export default {
         return {
             branches: Array(),
             exercises: Array(),
-            loading: false,
-            exercise: { /* new exercise */ },
+            reports: Array(),
+            exercise: null,
+            showExerciseById: null,
+            loadingExercises: false,
+            loadingReports: false,
         };
     },
     methods: {
         getExercises(ids) {
-            this.loading = true;
+            this.loadingExercises = true;
             axios.get("http://localhost:9000/exercise", { params: {ids} }).then(
                 response => {
-                    this.loading = false;
-                    this.statusExercises = "success";
+                    this.loadingExercises = false;
 
                     if (response.data) {
                         response.data.map(exercise => {
                             let savedExercise = this.exercises.find(e => e._id === exercise._id);
                             if (Boolean(savedExercise) === false) {
+                                exercise.createdAt = moment(exercise.createdAt).locale("pl").format("ll");
                                 this.exercises.push(exercise);
                             }
                         })
                     }
                 },
                 error => {
-                    this.loading = false;
-                    this.statusExercises = "error";
+                    this.loadingExercises = false;
                     console.log(error);
                 }
             );
         },
         readExerciseById(id) {
-            console.log(this.exercises);
             return this.exercises.find(v => v._id === id) || {};
-        }
+        },
+        getReports(){
+            this.loadingReports = true;
+            axios.get("http://localhost:9000/report", { params: { exercise: this.exercise._id } }).then(
+                response => {
+                    this.loadingReports = false;
+
+                    if (response.data) {
+                        // transform date to readable
+                        response.data.map(report => {
+                            report.createdAt = moment(report.createdAt).locale("pl").format("lll");
+                            return report;
+                        });
+                        this.reports = response.data;
+                    }
+                },
+                error => {
+                    this.loadingReports = false;
+                    console.log(error);
+                }
+            );
+        },
     },
     computed: {
         
+    },
+    watch:{
+        exercise(value) {
+            if (value) this.getReports();
+        },
+        showExerciseById(value) {
+            if (value) {
+                let exerciseToShow = this.exercises.find(e => e._id === value);
+                this.exercise = exerciseToShow;
+            } else {
+                this.exercise = null;
+            }
+        }
     }
 };
 </script>
