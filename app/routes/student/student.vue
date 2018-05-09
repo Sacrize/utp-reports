@@ -65,6 +65,7 @@
                                 
                             <hr />
 
+                            <button class="btn" v-on:click="fetchAttachment" v-if="exercise.file">Pobierz załącznik</button>
                             <button class="btn" data-toggle="modal" data-target="#uploadReportModal">Wyślij rozwiązanie</button>
                             
                             <div class="card mt-3">
@@ -184,6 +185,9 @@ export default {
                 }
             );
         },
+        fetchAttachment() {
+            window.location = `http://localhost:9000/exercise/file?exercise=${this.exercise._id}`;
+        }
     },
     computed: {
         

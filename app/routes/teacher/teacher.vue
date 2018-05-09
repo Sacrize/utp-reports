@@ -58,6 +58,20 @@
                 </div>
                 <div class="col-xs col-md-8">
                     <header>
+                        <h4>Podgląd ćwiczenia</h4>
+                        <hr />
+                    </header>
+                    <div class="card" v-if="exercise">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ exercise.name }}</h4>
+                            <p>{{ exercise.description }}</p>
+                                
+                            <hr />
+
+                            <button class="btn" v-on:click="fetchAttachment" v-if="exercise.file">Pobierz załącznik</button>
+                        </div>
+                    </div>
+                    <header class="mt-5">
                         <h4>Sprawozdania</h4>
                         <hr />
                     </header>
@@ -177,6 +191,9 @@ export default {
                 }
             );
         },
+        fetchAttachment() {
+            window.location = `http://localhost:9000/exercise/file?exercise=${this.exercise._id}`;
+        }
     },
     computed: {
         

@@ -2,6 +2,15 @@
 const path = require("path");
 
 class Config {
+    /**
+     * @constructor
+     * @prop {String} env
+     * @prop {String} root
+     * @prop {String} rootPath
+     * @prop {Object} app
+     * @prop {Number} port
+     * @prop {Object} clamscan
+     */
     constructor() {
         this.env = process.env.NODE_ENV || "development";
         this.root = path.normalize(__dirname + "/..");
@@ -10,6 +19,7 @@ class Config {
             name: "Express-Vue-MVC-Starter",
         };
         this.port = Number(process.env.PORT) || 9000;
+        this.clamscan = {};
     }
 }
 module.exports = Config;

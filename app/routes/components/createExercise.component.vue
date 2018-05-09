@@ -10,10 +10,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-warning" v-if="loading">
-                        <img src="/static/loader.svg" />
+                        <img src="/assets/loader.svg" />
                         Trwa dodawanie, poczekaj jeszcze chwilę.
                     </div>
-                    <div class="alert alert-success" v-if="status === 'success'">
+                    <div class="alert alert-success" v-else-if="status === 'success'">
                         Ćwiczenie zostało dodane pomyślnie.
                     </div>
                     <div class="alert alert-danger" v-else-if="status === 'error'">
@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-group">
                             <label for="attachmentOfExercise">Załącznik</label>
-                            <input type="file" class="form-control-file" id="attachmentOfExercise">
+                            <input type="file" class="form-control-file" id="attachmentOfExercise" v-on:change="processFile($event)">
                         </div>
                         <hr />
                         <div class="card">
@@ -99,12 +99,15 @@ export default {
     };
   },
   methods: {
+    processFile(event) {
+      this.exercise.attachment = event.target.files[0];
+    },
     onSubmit() {
       let fd = new FormData();
 
       fd.append("name", this.exercise.name);
       fd.append("description", this.exercise.description);
-    //   fd.append("attachment", this.exercise.attachment);
+      fd.append("attachment", this.exercise.attachment);
       fd.append("branch", this.exercise.branch);
       fd.append("specialization", this.exercise.specialization);
       fd.append("typeOfStudy", this.exercise.typeOfStudy);
@@ -116,12 +119,17 @@ export default {
         response => {
           this.loading = false;
           this.status = "success";
+          this.resetForm();
         },
         error => {
           this.loading = false;
           this.status = "error";
         }
       );
+    },
+    resetForm() {
+      this.exercise = {};
+      this.$el.getElementsByTagName("form")[0].reset();
     },
     getBranches() {
       axios.get("http://localhost:9000/school/branches").then(
@@ -195,5 +203,9 @@ export default {
 <style lang="css" scoped>
 button.card-header {
   text-align: left;
+}
+img {
+  width: 16px;
+  margin-top: -2px;
 }
 </style>
