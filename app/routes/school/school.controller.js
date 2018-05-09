@@ -45,7 +45,7 @@ module.exports = (router) => {
          */
         async (req, res) => {
             let branch = req.query.branch;
-            console.log(branch);
+            
             if (!branch || _.isString(branch) === false) {
                 return res.status(400).send("bad request");
             }

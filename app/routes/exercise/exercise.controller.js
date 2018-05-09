@@ -34,8 +34,6 @@ module.exports = (router) => {
                 console.log(error);
                 return res.status(500).send("server error");
             }
-
-            res.status(200).send(ids);
         },
     );
     router.post("/exercise",

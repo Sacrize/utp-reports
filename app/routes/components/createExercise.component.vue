@@ -116,7 +116,6 @@ export default {
         response => {
           this.loading = false;
           this.status = "success";
-          console.log(response.data);
         },
         error => {
           this.loading = false;

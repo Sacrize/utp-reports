@@ -39,8 +39,8 @@
                                                     <div class="card" v-for="exerciseId in semester.exercises" v-bind:key="exerciseId">
                                                         <button class="card-body btn btn-link" v-on:click.prevent="showExerciseById = exerciseId">
                                                             <div class="d-flex justify-content-between">
-                                                                <span>{{ readExerciseById(exerciseId).name }}</span>
-                                                                <small>12.10.2017</small>
+                                                                <small>{{ readExerciseById(exerciseId).name }}</small>
+                                                                <small>{{ readExerciseById(exerciseId).createdAt }}</small>
                                                             </div>
                                                         </button>
                                                     </div>
@@ -64,9 +64,10 @@
                             <p>{{ exercise.description }}</p>
                                 
                             <hr />
-                            <button class="btn btn-primary">Wyślij rozwiązanie</button>
+
+                            <button class="btn" data-toggle="modal" data-target="#uploadReportModal">Wyślij rozwiązanie</button>
                             
-                            <div class="card mt-3" v-show="reports.length">
+                            <div class="card mt-3">
                                 <div class="card-header">
                                     <button class="btn btn-link" >Historia</button>
                                 </div>
@@ -87,7 +88,15 @@
 
                                         <div id="list-reports">
                                             <ul class="list-group list-group-flush py-2">
-                                                
+                                                 <li class="list-group-item bg-light" v-for="report in historyOfUpload" v-bind:key="report._id">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span><b>Status:</b> {{ report.status }}</span>
+                                                        <small>{{ report.createdAt }}</small>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </div>
 
@@ -103,57 +112,86 @@
             </div>
         </div>
     </section>
+
+    <upload-report-modal :exercise="exercise"></upload-report-modal>
 </div>
 </template>
 
 <script>
 import navbar from "../navbar.vue";
+import uploadReport from "../components/uploadReport.component.vue";
 export default {
     components: {
         "navbar-for-logged": navbar,
+        "upload-report-modal": uploadReport,
     },
     data: function() {
         return {
             branches: Array(),
             exercises: Array(),
-            loading: false,
             reports: Array(),
             showExerciseById: null,
             exercise: null,
+            historyOfUpload: Array(),
+            loadingExercises: false,
+            loadingHistoryOfUpload: false,
         };
     },
     methods: {
         getExercises(ids) {
-            this.loading = true;
+            this.loadingExercises = true;
             axios.get("http://localhost:9000/exercise", { params: {ids} }).then(
                 response => {
-                    this.loading = false;
-                    this.statusExercises = "success";
+                    this.loadingExercises = false;
 
                     if (response.data) {
                         response.data.map(exercise => {
                             let savedExercise = this.exercises.find(e => e._id === exercise._id);
                             if (Boolean(savedExercise) === false) {
+                                exercise.createdAt = moment(exercise.createdAt).locale("pl").format("ll");
                                 this.exercises.push(exercise);
                             }
                         })
                     }
                 },
                 error => {
-                    this.loading = false;
-                    this.statusExercises = "error";
+                    this.loadingExercises = false;
                     console.log(error);
                 }
             );
         },
         readExerciseById(id) {
             return this.exercises.find(v => v._id === id) || {};
-        }
+        },
+        getHistoryOfUpload(){
+            this.loadingHistoryOfUpload = true;
+            axios.get("http://localhost:9000/report/history", { params: { exercise: this.exercise._id } }).then(
+                response => {
+                    this.loadingHistoryOfUpload = false;
+
+                    if (response.data) {
+                        // transform date to readable
+                        response.data.map(report => {
+                            report.createdAt = moment(report.createdAt).locale("pl").format("lll");
+                            return report;
+                        });
+                        this.historyOfUpload = response.data;
+                    }
+                },
+                error => {
+                    this.loadingHistoryOfUpload = false;
+                    console.log(error);
+                }
+            );
+        },
     },
     computed: {
         
     },
     watch: {
+        exercise(value) {
+            if (value) this.getHistoryOfUpload();
+        },
         showExerciseById(value) {
             if (value) {
                 let exerciseToShow = this.exercises.find(e => e._id === value);
