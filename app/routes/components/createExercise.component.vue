@@ -34,7 +34,7 @@
                         </div>
                         <hr />
                         <div class="card">
-                            <button class="card-header" data-toggle="collapse" href="#classCollapse">
+                            <button type="button" class="card-header" data-toggle="collapse" href="#classCollapse">
                                 Wybierz kogo ma dotyczyć to ćwiczenie.
                             </button>
                             <div class="card-body collapse" id="classCollapse">
@@ -85,11 +85,7 @@
 <script>
 export default {
   props: {
-    classes: {
-      type: Array,
-      required: false,
-      default: Array()
-    }
+    
   },
   data: function() {
     return {
@@ -103,10 +99,38 @@ export default {
     };
   },
   methods: {
+    onSubmit() {
+      let fd = new FormData();
+
+      fd.append("name", this.exercise.name);
+      fd.append("description", this.exercise.description);
+    //   fd.append("attachment", this.exercise.attachment);
+      fd.append("branch", this.exercise.branch);
+      fd.append("specialization", this.exercise.specialization);
+      fd.append("typeOfStudy", this.exercise.typeOfStudy);
+      fd.append("semester", this.exercise.semester);
+
+      this.loading = true;
+
+      axios.post("http://localhost:9000/exercise", fd).then(
+        response => {
+          this.loading = false;
+          this.status = "success";
+          console.log(response.data);
+        },
+        error => {
+          this.loading = false;
+          this.status = "error";
+        }
+      );
+    },
     getBranches() {
       axios.get("http://localhost:9000/school/branches").then(
         response => {
           this.branches = response.data || Array();
+          this.exercise.specialization = null;
+          this.exercise.typeOfStudy = null;
+          this.exercise.semester = null;
         },
         error => {
           console.log(error);
@@ -114,50 +138,56 @@ export default {
       );
     },
     getSpecializations() {
-      axios.get("http://localhost:9000/school/specializations", {
+      axios
+        .get("http://localhost:9000/school/specializations", {
           params: { branch: this.exercise.branch }
-      })
-      .then(
-        response => {
-          this.specializations = response.data || Array();
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        })
+        .then(
+          response => {
+            this.specializations = response.data || Array();
+            this.exercise.typeOfStudy = null;
+            this.exercise.semester = null;
+          },
+          error => {
+            console.log(error);
+          }
+        );
     },
     getTypesOfStudy() {
-      axios.get("http://localhost:9000/school/typesofstudy", {
-          params: { 
+      axios
+        .get("http://localhost:9000/school/typesofstudy", {
+          params: {
             branch: this.exercise.branch,
-            specialization: this.exercise.specialization,
+            specialization: this.exercise.specialization
           }
-      })
-      .then(
-        response => {
-          this.typesOfStudy = response.data || Array();
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        })
+        .then(
+          response => {
+            this.typesOfStudy = response.data || Array();
+            this.exercise.semester = null;
+          },
+          error => {
+            console.log(error);
+          }
+        );
     },
     getSemesters() {
-      axios.get("http://localhost:9000/school/semesters", {
-          params: { 
+      axios
+        .get("http://localhost:9000/school/semesters", {
+          params: {
             branch: this.exercise.branch,
             specialization: this.exercise.specialization,
-            typesOfStudy: this.exercise.typeOfStudy,
+            typesOfStudy: this.exercise.typeOfStudy
           }
-      })
-      .then(
-        response => {
-          this.semesters = response.data || Array();
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        })
+        .then(
+          response => {
+            this.semesters = response.data || Array();
+          },
+          error => {
+            console.log(error);
+          }
+        );
     }
   }
 };

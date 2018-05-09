@@ -127,9 +127,7 @@
         </div>
     </section>
 
-    <create-exercise-modal 
-        :classes="classes">
-    </create-exercise-modal>
+    <create-exercise-modal></create-exercise-modal>
 
 </div>
 </template>
@@ -146,7 +144,6 @@ export default {
         return {
             branches: Array(),
             exercises: Array(),
-            classes: Array(),
             loading: false,
             exercise: { /* new exercise */ },
         };

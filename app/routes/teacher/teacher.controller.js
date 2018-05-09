@@ -67,25 +67,6 @@ module.exports = (router) => {
 
             data.branches = branches;
 
-            let classes = [
-                { 
-                    _id: 1,
-                    branch: "Wydział Telekomunikacji, Informatyki i Elektrotechniki ",
-                    speciailization: "Informatyka stosowana",
-                    typeOfStudy: "Studia Niestacjonarne Pierwszego Stopnia",
-                    semester: "Rok 1 Semestr I (zimowy) rok akademicki 2017/2018",
-                },
-                { 
-                    _id: 2,
-                    branch: "Wydział Telekomunikacji, Informatyki i Elektrotechniki ",
-                    speciailization: "Informatyka stosowana",
-                    typeOfStudy: "Studia Niestacjonarne Pierwszego Stopnia",
-                    semester: "Rok 1 Semestr II (letni) rok akademicki 2017/2018",
-                }
-            ];
-
-            data.classes = classes;
-            
             res.renderVue("teacher/teacher.vue", data, req.vueOptions);
         },
     );
