@@ -2,9 +2,6 @@
 <div id="teacher">
     <navbar-for-logged>
         <template slot="right-menu">
-            <li class="nav-item mr-2">
-                <a class="btn btn-primary" href="javascript:" data-toggle="modal" data-target="#createExerciseModal">Dodaj ćwiczenie</a>
-            </li>
             <li class="nav-item">
                 <a class="btn btn-primary" href="/logout">Wyloguj</a>
             </li>
@@ -40,12 +37,12 @@
                                                 </button>
                                                 <div class="card-body collapse" :id="`tree-${index1}-${index2}-${index3}-${index4}`">
                                                     <div class="card" v-for="exerciseId in semester.exercises" v-bind:key="exerciseId">
-                                                        <div class="card-body">
+                                                        <button class="card-body btn btn-link" v-on:click.prevent="showExerciseById = exerciseId">
                                                             <div class="d-flex justify-content-between">
-                                                                <span>{{ readExerciseById(exerciseId).name }} <small>(4 / 20)</small></span>
+                                                                <span>{{ readExerciseById(exerciseId).name }}</span>
                                                                 <small>12.10.2017</small>
                                                             </div>
-                                                        </div>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -58,69 +55,46 @@
                 </div>
                 <div class="col-xs col-md-8">
                     <header>
-                        <h4>Sprawozdania</h4>
+                        <h4>Podgląd ćwiczenia</h4>
                         <hr />
                     </header>
-                    <div class="card">
+                    <div class="card" v-if="exercise">
                         <div class="card-body">
-                            <div id="list">
-                                <div class="d-flex justify-content-end">
-                                    <div class="dropdown">
-                                    <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
-                                        Sortuj
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                    </div>
+                            <h4 class="card-title">{{ exercise.name }}</h4>
+                            <p>{{ exercise.description }}</p>
+                                
+                            <hr />
+                            <button class="btn btn-primary">Wyślij rozwiązanie</button>
+                            
+                            <div class="card mt-3" v-show="reports.length">
+                                <div class="card-header">
+                                    <button class="btn btn-link" >Historia</button>
                                 </div>
+                                <div class="card-body">
+                                    <div id="list">
+                                        <div class="d-flex justify-content-end">
+                                            <div class="dropdown">
+                                            <button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                                                Sortuj
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                            </div>
+                                        </div>
 
-                                <div id="list-reports">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item bg-light">
-                                            <div class="d-flex justify-content-between">
-                                                <h5>Uczeń: Jan Kowalski</h5>
-                                                <small>20.12.2018</small>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-link btn-sm">Oceń</button>
-                                                <button class="btn btn-link btn-sm">Pobierz</button>
-                                                <button class="btn btn-link btn-sm">Odrzuć</button>
-                                                <button class="btn btn-link btn-sm">Akceptuj</button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item bg-light">
-                                            <div class="d-flex justify-content-between">
-                                                <h5>Uczeń: Jan Kowalski</h5>
-                                                <small>20.12.2018</small>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-link btn-sm">Oceń</button>
-                                                <button class="btn btn-link btn-sm">Pobierz</button>
-                                                <button class="btn btn-link btn-sm">Odrzuć</button>
-                                                <button class="btn btn-link btn-sm">Akceptuj</button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item bg-light">
-                                            <div class="d-flex justify-content-between">
-                                                <h5>Uczeń: Jan Kowalski</h5>
-                                                <small>20.12.2018</small>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-link btn-sm">Oceń</button>
-                                                <button class="btn btn-link btn-sm">Pobierz</button>
-                                                <button class="btn btn-link btn-sm">Odrzuć</button>
-                                                <button class="btn btn-link btn-sm">Akceptuj</button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                        <div id="list-reports">
+                                            <ul class="list-group list-group-flush py-2">
+                                                
+                                            </ul>
+                                        </div>
 
-                                <div class="pt-2 d-flex justify-content-between">
-
-                                    <button class="btn btn-link btn-sm">Pobierz wszystkie</button>
+                                        <div class="d-flex justify-content-between">
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -129,26 +103,23 @@
             </div>
         </div>
     </section>
-
-    <create-exercise-modal></create-exercise-modal>
-
 </div>
 </template>
 
 <script>
 import navbar from "../navbar.vue";
-import createExercise from "../components/createExercise.component.vue";
 export default {
     components: {
         "navbar-for-logged": navbar,
-        "create-exercise-modal": createExercise,
     },
     data: function() {
         return {
             branches: Array(),
             exercises: Array(),
             loading: false,
-            exercise: { /* new exercise */ },
+            reports: Array(),
+            showExerciseById: null,
+            exercise: null,
         };
     },
     methods: {
@@ -176,12 +147,21 @@ export default {
             );
         },
         readExerciseById(id) {
-            console.log(this.exercises);
             return this.exercises.find(v => v._id === id) || {};
         }
     },
     computed: {
         
+    },
+    watch: {
+        showExerciseById(value) {
+            if (value) {
+                let exerciseToShow = this.exercises.find(e => e._id === value);
+                this.exercise = exerciseToShow;
+            } else {
+                this.exercise = null;
+            }
+        }
     }
 };
 </script>
