@@ -1,0 +1,9 @@
+.tmp/
+.vscode/
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+.git/
+node_modules/
+data/

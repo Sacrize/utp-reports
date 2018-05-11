@@ -1,5 +1,5 @@
 {
-    "name": "express-vue-mvc-starter",
+    "name": "utp-reports",
     "version": "1.0.0",
     "private": true,
     "scripts": {
@@ -114,6 +114,6 @@
         "uuid": "^3.2.1"
     },
     "main": "index.js",
-    "author": "Daniel Cherubini <daniel@cherubini.casa>",
+    "author": "Studenci 1 roku UTP",
     "license": "MIT"
 }

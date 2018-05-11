@@ -1,0 +1,54 @@
+version: '2'
+services:
+  clamav:
+    image: mkodockx/docker-clamav
+    container_name: clamav
+    # user: clamav
+    restart: always
+    volumes:
+      - clamscan:/usr/bin/clamscan
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    user: mongodb
+    restart: always
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - mongo_db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: jenkins
+    restart: always
+    ports:
+      - "1337:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  web:
+    build: .
+    container_name: web
+    restart: always
+    depends_on:
+      - mongo
+      - clamav
+    ports:
+      - "9000:9000"
+    volumes:
+      - clamscan:/usr/bin/clamscan
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/reports
+    links:
+      - clamav
+      - mongo
+volumes:
+  clamscan:
+  jenkins_home:
+  mongo_db:
