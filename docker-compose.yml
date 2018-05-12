@@ -3,10 +3,10 @@ services:
   clamav:
     image: mkodockx/docker-clamav
     container_name: clamav
-    # user: clamav
+    user: clamav
     restart: always
-    volumes:
-      - clamscan:/usr/bin/clamscan
+    ports:
+      - "3310:3310"
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -40,8 +40,6 @@ services:
       - clamav
     ports:
       - "9000:9000"
-    volumes:
-      - clamscan:/usr/bin/clamscan
     environment:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongo:27017/reports
@@ -49,6 +47,6 @@ services:
       - clamav
       - mongo
 volumes:
-  clamscan:
   jenkins_home:
+  clamav:
   mongo_db:

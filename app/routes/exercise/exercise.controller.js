@@ -7,7 +7,7 @@ const {isTeacher} = require("../../middleware");
 const multiparty = require('connect-multiparty')();
 const Gridfs = require("gridfs-stream");
 const config = require("../../config");
-const clam = require("clamscan")(config.clamscan);
+const clam = require("clamav.js");
 const fs = require('fs');
 
 /**
@@ -110,28 +110,33 @@ module.exports = (router) => {
 
             let file = undefined;
             if (req.files && req.files.attachment) {
-                file = await new Promise((resolve, reject) => {
-                    clam.is_infected(req.files.attachment.path, (err, path, is_infected) => {
-                        if (err) return reject(err);
-              
-                        if (is_infected) {
-                          return reject(new Error('Abort. File is infected.'));
-                        }
-              
-                        const writestream = gfs.createWriteStream({
-                          filename: req.files.attachment.name,
-                          content_type: req.files.attachment.mimetype,
-                          mode: 'w'
-                        });
-              
-                        fs.createReadStream(req.files.attachment.path).pipe(writestream);
-              
-                        writestream.on('close', (file) => {
-                          fs.unlinkSync(req.files.attachment.path);
-                          return resolve(file);
+                try {
+                    file = await new Promise((resolve, reject) => {
+                        clam.createScanner(3310, 'clamav').scan(req.files.attachment.path, (err, object, malicious) => {
+                            if (err) return reject(err);
+                
+                            if (malicious) {
+                            return reject(new Error('Abort. File is infected.'));
+                            }
+                
+                            const writestream = gfs.createWriteStream({
+                                filename: req.files.attachment.name,
+                                content_type: req.files.attachment.mimetype,
+                                mode: 'w'
+                            });
+                
+                            fs.createReadStream(req.files.attachment.path).pipe(writestream);
+                
+                            writestream.on('close', (file) => {
+                                fs.unlinkSync(req.files.attachment.path);
+                                return resolve(file);
+                            });
                         });
                     });
-                });
+                } catch (error) {
+                    console.log(error);
+                    return res.status(500).send("server error");
+                }
             }
 
             let exercise = new Exercise({

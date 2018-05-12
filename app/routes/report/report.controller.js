@@ -90,13 +90,6 @@ module.exports = (router) => {
 
                 await report.save();
 
-                let test = await Report.find({
-                    _id: { $ne: report._id, },
-                    studentIndex: report.studentIndex,
-                    exercise: report.exercise,
-                }).exec();
-                console.log(test)
-
                 await Report.update({
                     _id: { $ne: report._id, },
                     studentIndex: report.studentIndex,
