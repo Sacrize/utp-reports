@@ -108,4 +108,16 @@ module.exports = (router) => {
             }
         },
     );
+    router.patch("/reports/:id",
+        isAuthenticated,
+        isTeacher,
+        /**
+         * @param {object} req
+         * @param {object} res
+         */
+        (req, res) => {
+            /* tutaj */
+            
+        }
+    );
 };
