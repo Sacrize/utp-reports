@@ -90,6 +90,7 @@ module.exports = (router) => {
 
                 await report.save();
 
+                // przedawnianie pozostalych sprawozdań
                 await Report.update({
                     _id: { $ne: report._id, },
                     studentIndex: report.studentIndex,
@@ -115,9 +116,37 @@ module.exports = (router) => {
          * @param {object} req
          * @param {object} res
          */
-        (req, res) => {
-            /* tutaj */
+        async (req, res) => {
+            const id = req.params.id;
+            const status = req.body.status;
+            const reason = req.body.reason;
             
+            let report = await Report.findOne()
+                .where({ _id: id, });
+
+            if (!report) {
+                return res.status(400).send("bad request");
+            }
+
+            try {
+
+                await Report.update({
+                    _id: id,
+                }, {
+                    $set: Object.assign({}, 
+                        { status: status, }, 
+                        status === 'rejected' ? {
+                            reason: reason,
+                        } : {}
+                    ),
+                });
+
+                return res.status(200).send("ok");
+
+            } catch (error) {
+                console.log(error);
+                return res.status(500).send("server error");
+            }
         }
     );
 };
