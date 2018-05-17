@@ -9,10 +9,10 @@
                    </button>
          </div>
          <div class="modal-body">
-             <form v-on:submit >
+             <form v-on:submit.prevent="onSubmit">
                  <div class="form-group">
                      <label for="reasonRejectE">Powód odrzucenia sprawozdania</label>
-                     <input type="text" class="form-control" id="reasonRejectE" pleaceholder="np. Brak wniosków" v-model="">
+                     <input type="text" class="form-control" id="reasonRejectE" pleaceholder="np. Brak wniosków" v-model="reason">
                  </div>
                  <hr />
                  <button type="submit" class="btn btn-primary">Zapisz</button>
@@ -23,3 +23,18 @@
     </div> <!--end div class="modal-dialog" role="document"-->
 </div> <!--end class="modal fade" id="reasonReject"-->
 </template>
+
+<script>
+export default{
+    props: {
+        data: {
+            reason:''
+        },
+        methods:{
+            onSubmit: function(){
+                return this.reason;
+            }
+        }
+    }
+}
+</script>

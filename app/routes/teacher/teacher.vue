@@ -101,8 +101,8 @@
                                             <div class="d-flex justify-content-end">
                                                 <button class="btn btn-link btn-sm">Oceń</button>
                                                 <button class="btn btn-link btn-sm">Pobierz</button>
-                                                <button class="btn btn-link btn-sm">Odrzuć</button>
-                                                <button class="btn btn-link btn-sm">Akceptuj</button>
+                                                <button class="btn btn-link btn-sm" v-on:click="reject(report._id)">Odrzuć</button>
+                                                <button class="btn btn-link btn-sm" v-on:click="accept(report._id)">Akceptuj</button>
                                             </div>
                                         </li>
                                     </ul>
@@ -128,6 +128,7 @@
 <script>
 import navbar from "../navbar.vue";
 import createExercise from "../components/createExercise.component.vue";
+import reason from "../components/reasonReject.component.vue";
 export default {
     components: {
         "navbar-for-logged": navbar,
@@ -193,7 +194,32 @@ export default {
         },
         fetchAttachment() {
             window.location = `http://localhost:9000/exercise/file?exercise=${this.exercise._id}`;
-        }
+        },
+        accept(id) {
+            let fd = new FormData();
+            fd.append("status", "accepted");
+            axios.patch(`http://localhost:9000/reports/${id}`, fd, {
+                response => {
+                console.log(response);
+            },
+            error => {
+                console.log(error);
+            }
+         });
+        },
+        reject(id) {
+	        let reason = "test";
+            let fd = new FormData();
+            fd.append("status", "rejected");
+            fd.append("reason", reason);
+            axios.patch(`http://localhost:9000/reports/${id}`, fd, {
+                response => {
+                console.log(response);
+            },
+                error => {
+                console.log(error);
+            }
+    });
     },
     computed: {
         
