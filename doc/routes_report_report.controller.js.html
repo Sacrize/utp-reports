@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/report/report.controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/report/report.controller.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//@ts-check
+const mongoose = require("mongoose");
+const _ = require("lodash");
+const Report = mongoose.model("Report");
+const {
+  isAuthenticated,
+} = require("../../middleware");
+const {
+  isStudent,
+} = require("../../middleware");
+const {
+  isTeacher,
+} = require("../../middleware");
+const multiparty = require("connect-multiparty")();
+/**
+ * Reports Contoller
+ * @param {object} router
+ */
+module.exports = (router) => {
+  router.get("/report",
+    isAuthenticated,
+    isTeacher,
+    /**
+     * @param {object} req
+     * @param {object} res
+     */
+    async (req, res) => {
+      let exercise = req.query.exercise;
+
+      if (_.isString(exercise) === false) {
+        return res.status(400).send("bad request");
+      }
+
+      try {
+
+        let reports = await Report.find()
+          .where({
+            exercise: exercise,
+          })
+          .sort({
+            createdAt: "desc",
+          });
+
+        reports = _.uniqBy(reports, "studentIndex");
+        return res.status(200).json(reports);
+
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("server error");
+      }
+    },
+  );
+  router.get("/report/history",
+    isAuthenticated,
+    isStudent,
+    /**
+     * @param {object} req
+     * @param {object} res
+     */
+    async (req, res) => {
+      let exercise = req.query.exercise;
+
+      if (_.isString(exercise) === false) {
+        return res.status(400).send("bad request");
+      }
+
+      try {
+
+        let reports = await Report.find()
+          .where({
+            exercise: exercise,
+          })
+          .sort({
+            createdAt: "desc",
+          });
+
+        return res.status(200).json(reports);
+
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("server error");
+      }
+    },
+  );
+  router.post("/report",
+    isAuthenticated,
+    isStudent,
+    multiparty,
+    /**
+     * @param {object} req
+     * @param {object} res
+     */
+    async (req, res) => {
+      let exercise = req.body.exercise;
+
+      let report = new Report({
+        _id: new mongoose.Types.ObjectId(),
+        studentName: req.session.user.name,
+        studentIndex: req.session.user.index,
+        exercise: exercise,
+      });
+
+      try {
+
+        await report.save();
+
+        // przedawnianie pozostalych sprawozdań
+        await Report.update({
+          _id: {
+            $ne: report._id,
+          },
+          studentIndex: report.studentIndex,
+          exercise: report.exercise,
+        }, {
+          $set: {
+            status: "deprecated",
+          },
+        }, {
+          multi: true,
+        });
+
+        return res.status(200).json(report);
+
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("server error");
+      }
+    },
+  );
+  router.patch("/reports/:id",
+    isAuthenticated,
+    isTeacher,
+    /**
+     * @param {object} req
+     * @param {object} res
+     */
+    async (req, res) => {
+      const id = req.params.id;
+      const status = req.body.status;
+      const reason = req.body.reason;
+
+      let report = await Report.findOne()
+        .where({
+          _id: id,
+        });
+
+      if (!report) {
+        return res.status(400).send("bad request");
+      }
+
+      try {
+
+        await Report.update({
+          _id: id,
+        }, {
+          $set: Object.assign({}, {
+              status: status,
+            },
+            status === "rejected" ? {
+              reason: reason,
+            } : {},
+          ),
+        });
+
+        return res.status(200).send("ok");
+
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("server error");
+      }
+    },
+  );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li></ul><h3>Namespaces</h3><ul><li><a href="middlewares.html">middlewares</a></li><li><a href="routes.html">routes</a></li><li><a href="routes_student.html">routes/student</a></li><li><a href="routes_teacher.html">routes/teacher</a></li><li><a href="services.html">services</a></li><li><a href="utils.html">utils</a></li><li><a href="views_student.html">views/student</a></li></ul><h3>Global</h3><ul><li><a href="global.html#init">init</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jun 13 2018 20:52:32 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

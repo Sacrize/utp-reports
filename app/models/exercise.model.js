@@ -1,10 +1,11 @@
 // @ts-nocheck
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
 const schema = mongoose.Schema({
 
     _id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
     },
 
     branch: {
@@ -34,12 +35,12 @@ const schema = mongoose.Schema({
     name: {
         type: String,
         trim: true,
-        required: true
+        required: true,
     },
 
     owner: { /* teacher */
         type: String,
-        required: true
+        required: true,
     },
 
     description: {
@@ -53,14 +54,14 @@ const schema = mongoose.Schema({
 
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
 
     updatedAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 
 });
 
-module.exports = mongoose.model('Exercise', schema);
+module.exports = mongoose.model("Exercise", schema);

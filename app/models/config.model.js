@@ -3,6 +3,7 @@ const path = require("path");
 
 class Config {
     /**
+     * Model konfiguracji aplikacji.
      * @constructor
      * @prop {String} env
      * @prop {String} root

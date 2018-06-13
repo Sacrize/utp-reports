@@ -19,127 +19,140 @@ const mongoose = require("mongoose");
  * @param {object} config
  */
 module.exports.init = (app, config) => {
-    //Setup
-    const env = process.env.NODE_ENV || "development";
-    const router = express.Router();
-    let logType = "dev";
-    app.locals.ENV = env;
-    app.locals.ENV_DEVELOPMENT = (env === "development");
-    app.locals.rootPath = process.env.ROOT_PATH;
+  //Setup
+  const env = process.env.NODE_ENV || "development";
+  const router = express.Router();
+  let logType = "dev";
+  app.locals.ENV = env;
+  app.locals.ENV_DEVELOPMENT = (env === "development");
+  app.locals.rootPath = process.env.ROOT_PATH;
 
-    //ExpressVue Setup
-    const vueOptions = {
-        rootPath: path.join(__dirname, "routes"),
-        head: {
-            scripts:[
-                { src: 'assets/dependencies/jquery.slim.min.js' },
-                { src: 'assets/dependencies/popper.min.js' },
-                { src: 'assets/dependencies/bootstrap/bootstrap.min.js' },
-                { src: 'assets/dependencies/axios.min.js' },
-                { src: 'assets/dependencies/moment-with-locales.min.js' },
-            ],
-            styles: [
-                { style: "assets/dependencies/bootstrap/bootstrap.min.css" },
-                { style: "assets/rendered/style.css" }
-            ],
+  //ExpressVue Setup
+  const vueOptions = {
+    rootPath: path.join(__dirname, "routes"),
+    head: {
+      scripts: [{
+          src: "assets/dependencies/jquery.slim.min.js",
         },
-    };
-
-    mongoose.connect(process.env.MONGODB_URI || '');
-
-    // @ts-ignore
-    const expressVueMiddleware = expressVue.init(vueOptions);
-    app.use(expressVueMiddleware);
-
-    //Security
-    app.use(helmet());
-    app.disable("x-powered-by");
-
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({
-        extended: true,
-    }));
-    app.use(validator());
-
-    app.use(compress());
-
-    app.use(app.locals.rootPath, express.static(config.root));
-
-    let sessionConfig = {
-        name: "session",
-        keys: [
-            "CHANGE_ME",
-        ],
-        resave: true,
-        saveUninitialized: true,
-        cookie: {
-            domain: "foo.bar.com",
-            secure: false,
-            httpOnly: true,
+        {
+          src: "assets/dependencies/popper.min.js",
         },
+        {
+          src: "assets/dependencies/bootstrap/bootstrap.min.js",
+        },
+        {
+          src: "assets/dependencies/axios.min.js",
+        },
+        {
+          src: "assets/dependencies/moment-with-locales.min.js",
+        },
+      ],
+      styles: [{
+          style: "assets/dependencies/bootstrap/bootstrap.min.css",
+        },
+        {
+          style: "assets/rendered/style.css",
+        },
+      ],
+    },
+  };
+
+  mongoose.connect(process.env.MONGODB_URI || "");
+
+  // @ts-ignore
+  const expressVueMiddleware = expressVue.init(vueOptions);
+  app.use(expressVueMiddleware);
+
+  //Security
+  app.use(helmet());
+  app.disable("x-powered-by");
+
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({
+    extended: true,
+  }));
+  app.use(validator());
+
+  app.use(compress());
+
+  app.use(app.locals.rootPath, express.static(config.root));
+
+  let sessionConfig = {
+    name: "session",
+    keys: [
+      "CHANGE_ME",
+    ],
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      domain: "foo.bar.com",
+      secure: false,
+      httpOnly: true,
+    },
+  };
+  if (env === "production") {
+    app.set("trust proxy", 1);
+    sessionConfig.cookie.secure = true;
+    logType = "combined";
+  }
+
+  if (env === "development") {
+    app.use(logger(logType));
+  }
+
+  app.use(cookieParser());
+
+  app.use(methodOverride());
+
+  app.use(cookieSession(sessionConfig));
+
+  app.use("/", router);
+
+  /** @namespace routes */
+  let controllers = glob.sync(config.root + "/routes/**/*.js");
+  controllers.forEach(function(controller) {
+    module.require(controller)(router);
+  });
+
+  /**
+   * Generic 404 handler
+   * @param {object} req
+   * @param {object} res
+   */
+  function error404handler(req, res) {
+    const data = {
+      title: "Error 404",
     };
-    if (env === "production") {
-        app.set("trust proxy", 1);
-        sessionConfig.cookie.secure = true;
-        logType = "combined";
+    req.vueOptions = {
+      head: {
+        title: "Error 404",
+      },
+    };
+    res.statusCode = 404;
+    res.renderVue("error.vue", data, req.vueOptions);
+  }
+  app.use(error404handler);
+
+  /**
+   * Generic Error handling route
+   * @param {object} error
+   * @param {object} req
+   * @param {object} res
+   * @param {Function} next
+   */
+  function genericErrorHandler(error, req, res, next) {
+    res.statusCode = 500;
+    let data = {
+      debug: env === "development",
+      errorCode: error.code,
+      error: error.stack,
+    };
+    if (res.statusCode) {
+      res.renderVue("error.vue", data);
+    } else {
+      next();
     }
-
-    if (env === "development") {
-        app.use(logger(logType));
-    }
-
-    app.use(cookieParser());
-
-    app.use(methodOverride());
-
-    app.use(cookieSession(sessionConfig));
-
-    app.use("/", router);
-
-    let controllers = glob.sync(config.root + "/routes/**/*.js");
-    controllers.forEach(function(controller) {
-        module.require(controller)(router);
-    });
-
-    /**
-     * Generic 404 handler
-     * @param {object} req
-     * @param {object} res
-     */
-    function error404handler(req, res) {
-        const data = {
-            title: "Error 404",
-        };
-        req.vueOptions = {
-            head: {
-                title: "Error 404",
-            },
-        };
-        res.statusCode = 404;
-        res.renderVue("error.vue", data, req.vueOptions);
-    }
-    app.use(error404handler);
-
-    /**
-     * Generic Error handling route
-     * @param {object} error
-     * @param {object} req
-     * @param {object} res
-     * @param {Function} next
-     */
-    function genericErrorHandler(error, req, res, next) {
-        res.statusCode = 500;
-        let data = {
-            debug: env === "development",
-            errorCode: error.code,
-            error: error.stack,
-        };
-        if (res.statusCode) {
-            res.renderVue("error.vue", data);
-        } else {
-            next();
-        }
-    }
-    app.use(genericErrorHandler);
+  }
+  app.use(genericErrorHandler);
 
 };

@@ -129,88 +129,98 @@
 import navbar from "../navbar.vue";
 import createExercise from "../components/createExercise.component.vue";
 export default {
-    components: {
-        "navbar-for-logged": navbar,
-        "create-exercise-modal": createExercise,
-    },
-    data: function() {
-        return {
-            branches: Array(),
-            exercises: Array(),
-            reports: Array(),
-            exercise: null,
-            showExerciseById: null,
-            loadingExercises: false,
-            loadingReports: false,
-        };
-    },
-    methods: {
-        getExercises(ids) {
-            this.loadingExercises = true;
-            axios.get("http://localhost:9000/exercise", { params: {ids} }).then(
-                response => {
-                    this.loadingExercises = false;
+  components: {
+    "navbar-for-logged": navbar,
+    "create-exercise-modal": createExercise
+  },
+  data: function() {
+    return {
+      branches: Array(),
+      exercises: Array(),
+      reports: Array(),
+      exercise: null,
+      showExerciseById: null,
+      loadingExercises: false,
+      loadingReports: false
+    };
+  },
+  methods: {
+    getExercises(ids) {
+      this.loadingExercises = true;
+      axios.get("http://localhost:9000/exercise", { params: { ids } }).then(
+        response => {
+          this.loadingExercises = false;
 
-                    if (response.data) {
-                        response.data.map(exercise => {
-                            let savedExercise = this.exercises.find(e => e._id === exercise._id);
-                            if (Boolean(savedExercise) === false) {
-                                exercise.createdAt = moment(exercise.createdAt).locale("pl").format("ll");
-                                this.exercises.push(exercise);
-                            }
-                        })
-                    }
-                },
-                error => {
-                    this.loadingExercises = false;
-                    console.log(error);
-                }
-            );
+          if (response.data) {
+            response.data.map(exercise => {
+              let savedExercise = this.exercises.find(
+                e => e._id === exercise._id
+              );
+              if (Boolean(savedExercise) === false) {
+                exercise.createdAt = moment(exercise.createdAt)
+                  .locale("pl")
+                  .format("ll");
+                this.exercises.push(exercise);
+              }
+            });
+          }
         },
-        readExerciseById(id) {
-            return this.exercises.find(v => v._id === id) || {};
-        },
-        getReports(){
-            this.loadingReports = true;
-            axios.get("http://localhost:9000/report", { params: { exercise: this.exercise._id } }).then(
-                response => {
-                    this.loadingReports = false;
-
-                    if (response.data) {
-                        // transform date to readable
-                        response.data.map(report => {
-                            report.createdAt = moment(report.createdAt).locale("pl").format("lll");
-                            return report;
-                        });
-                        this.reports = response.data;
-                    }
-                },
-                error => {
-                    this.loadingReports = false;
-                    console.log(error);
-                }
-            );
-        },
-        fetchAttachment() {
-            window.location = `http://localhost:9000/exercise/file?exercise=${this.exercise._id}`;
+        error => {
+          this.loadingExercises = false;
+          console.log(error);
         }
+      );
     },
-    computed: {
-        
+    readExerciseById(id) {
+      return this.exercises.find(v => v._id === id) || {};
     },
-    watch:{
-        exercise(value) {
-            if (value) this.getReports();
-        },
-        showExerciseById(value) {
-            if (value) {
-                let exerciseToShow = this.exercises.find(e => e._id === value);
-                this.exercise = exerciseToShow;
-            } else {
-                this.exercise = null;
+    getReports() {
+      this.loadingReports = true;
+      axios
+        .get("http://localhost:9000/report", {
+          params: { exercise: this.exercise._id }
+        })
+        .then(
+          response => {
+            this.loadingReports = false;
+
+            if (response.data) {
+              // transform date to readable
+              response.data.map(report => {
+                report.createdAt = moment(report.createdAt)
+                  .locale("pl")
+                  .format("lll");
+                return report;
+              });
+              this.reports = response.data;
             }
-        }
+          },
+          error => {
+            this.loadingReports = false;
+            console.log(error);
+          }
+        );
+    },
+    fetchAttachment() {
+      window.location = `http://localhost:9000/exercise/file?exercise=${
+        this.exercise._id
+      }`;
     }
+  },
+  computed: {},
+  watch: {
+    exercise(value) {
+      if (value) this.getReports();
+    },
+    showExerciseById(value) {
+      if (value) {
+        let exerciseToShow = this.exercises.find(e => e._id === value);
+        this.exercise = exerciseToShow;
+      } else {
+        this.exercise = null;
+      }
+    }
+  }
 };
 </script>
 
@@ -230,8 +240,8 @@ export default {
 }
 
 header > hr {
-    margin-top: 0;
-    margin-bottom: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
 }
 
 /* #tree .card {

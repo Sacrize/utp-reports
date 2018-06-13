@@ -1,24 +1,24 @@
 // @ts-nocheck
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const schema = mongoose.Schema({
 
   _id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
   },
 
   exercise: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Exercise',
-    required: true
+    ref: "Exercise",
+    required: true,
   },
 
   studentName: {
     type: String,
     trim: true,
-    required: true
+    required: true,
   },
-  
+
   reason: {
     type: String,
     trim: true,
@@ -34,7 +34,7 @@ const schema = mongoose.Schema({
   status: {
     type: String,
     required: false,
-    default: 'waiting'
+    default: "waiting",
   },
 
   file: {
@@ -45,15 +45,15 @@ const schema = mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    max: Date.now
+    max: Date.now,
   },
 
   updatedAt: {
     type: Date,
     default: Date.now,
-    max: Date.now
-  }
+    max: Date.now,
+  },
 
 });
 
-module.exports = mongoose.model('Report', schema);
+module.exports = mongoose.model("Report", schema);

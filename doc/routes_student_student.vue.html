@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/student/student.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/student/student.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+&lt;div id="teacher">
+  &lt;navbar-for-logged>
+    &lt;template slot="right-menu">
+      &lt;li class="nav-item">
+        &lt;a class="btn btn-primary" href="/logout">Wyloguj&lt;/a>
+      &lt;/li>
+    &lt;/template>
+  &lt;/navbar-for-logged>
+
+  &lt;section class="section">
+    &lt;div class="container">
+      &lt;div class="row">
+        &lt;div class="col-xs col-md-4">
+          &lt;header>
+            &lt;h4>Ćwiczenia&lt;/h4>
+            &lt;hr />
+          &lt;/header>
+          &lt;div id="tree" class="card mb-2" v-for="(branch, index1) in branches" v-bind:key="index1">
+            &lt;button class="card-header btn btn-link" data-toggle="collapse" :href="`#tree-${index1}`">
+              &lt;div>{{ branch.name }}&lt;/div>
+            &lt;/button>
+            &lt;div class="card-body collapse" :id="`tree-${index1}`">
+              &lt;div class="card" v-for="(specialization, index2) in branch.specializations" v-bind:key="index2">
+                &lt;button class="card-header btn btn-link" data-toggle="collapse" :href="`#tree-${index1}-${index2}`">
+                  &lt;div>{{ specialization.name }}&lt;/div>
+                &lt;/button>
+                &lt;div class="card-body collapse" :id="`tree-${index1}-${index2}`">
+                  &lt;div class="card" v-for="(typeOfStudy, index3) in specialization.typesOfStudy" v-bind:key="index3">
+                    &lt;button class="card-header btn btn-link" data-toggle="collapse" :href="`#tree-${index1}-${index2}-${index3}`">
+                      &lt;div>{{ typeOfStudy.name }}&lt;/div>
+                    &lt;/button>
+                    &lt;div class="card-body collapse" :id="`tree-${index1}-${index2}-${index3}`">
+                      &lt;div class="card" v-for="(semester, index4) in typeOfStudy.semesters" v-bind:key="index4">
+                        &lt;button class="card-header btn btn-link" v-on:click.prevent="getExercises(semester.exercises)" data-toggle="collapse" :href="`#tree-${index1}-${index2}-${index3}-${index4}`">
+                          &lt;div>{{ semester.name }}&lt;/div>
+                        &lt;/button>
+                        &lt;div class="card-body collapse" :id="`tree-${index1}-${index2}-${index3}-${index4}`">
+                          &lt;div class="card" v-for="exerciseId in semester.exercises" v-bind:key="exerciseId">
+                            &lt;button class="card-body btn btn-link" v-on:click.prevent="showExerciseById = exerciseId">
+                              &lt;div class="d-flex justify-content-between">
+                                &lt;small>{{ readExerciseById(exerciseId).name }}&lt;/small>
+                                &lt;small>{{ readExerciseById(exerciseId).createdAt }}&lt;/small>
+                              &lt;/div>
+                            &lt;/button>
+                          &lt;/div>
+                        &lt;/div>
+                      &lt;/div>
+                    &lt;/div>
+                  &lt;/div>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+        &lt;div class="col-xs col-md-8">
+          &lt;header>
+            &lt;h4>Podgląd ćwiczenia&lt;/h4>
+            &lt;hr />
+          &lt;/header>
+          &lt;div class="card" v-if="exercise">
+            &lt;div class="card-body">
+              &lt;h4 class="card-title">{{ exercise.name }}&lt;/h4>
+              &lt;p>{{ exercise.description }}&lt;/p>
+
+              &lt;hr />
+
+              &lt;button class="btn" v-on:click="fetchAttachment" v-if="exercise.file">Pobierz załącznik&lt;/button>
+              &lt;button class="btn" data-toggle="modal" data-target="#uploadReportModal">Wyślij rozwiązanie&lt;/button>
+
+              &lt;div class="card mt-3">
+                &lt;div class="card-header">
+                  &lt;button class="btn btn-link">Historia&lt;/button>
+                &lt;/div>
+                &lt;div class="card-body">
+                  &lt;div id="list">
+                    &lt;div class="d-flex justify-content-end">
+                      &lt;div class="dropdown">
+                        &lt;button class="btn btn-link btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
+                          Sortuj
+                        &lt;/button>
+                        &lt;div class="dropdown-menu">
+                          &lt;a class="dropdown-item" href="#">Action&lt;/a>
+                          &lt;a class="dropdown-item" href="#">Another action&lt;/a>
+                          &lt;a class="dropdown-item" href="#">Something else here&lt;/a>
+                        &lt;/div>
+                      &lt;/div>
+                    &lt;/div>
+
+                    &lt;div id="list-reports">
+                      &lt;ul class="list-group list-group-flush py-2">
+                        &lt;li class="list-group-item bg-light" v-for="report in historyOfUpload" v-bind:key="report._id">
+                          &lt;div class="d-flex justify-content-between">
+                            &lt;span>
+                              &lt;b>Status:&lt;/b> {{ report.status }}&lt;/span>
+                            &lt;small>{{ report.createdAt }}&lt;/small>
+                          &lt;/div>
+                          &lt;div class="d-flex justify-content-end">
+
+                          &lt;/div>
+                        &lt;/li>
+                      &lt;/ul>
+                    &lt;/div>
+
+                    &lt;div class="d-flex justify-content-between">
+
+                    &lt;/div>
+                  &lt;/div>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  &lt;/section>
+
+  &lt;upload-report-modal :exercise="exercise">&lt;/upload-report-modal>
+&lt;/div>
+&lt;/template>
+
+&lt;script>
+/** @namespace views/student */
+import navbar from "../navbar.vue";
+import uploadReport from "../components/uploadReport.component.vue";
+
+export default {
+  components: {
+    "navbar-for-logged": navbar,
+    "upload-report-modal": uploadReport
+  },
+  /** 
+   * @memberof views/student
+   * @param {string[]} branches asd
+   * @param {string[]} exercises asd
+   * @param {string[]} reports as
+   * @param {string} showExerciseById asd
+   * @param {object} exercise asd
+   * @param {object[]} historyOfUpload asd
+   * @param {boolean} loadingExercises asd
+   * @param {boolean} loadingHistoryOfUploads asd
+   */
+  data: function() {
+    return {
+      branches: Array(),
+      exercises: Array(),
+      reports: Array(),
+      showExerciseById: null,
+      exercise: null,
+      historyOfUpload: Array(),
+      loadingExercises: false,
+      loadingHistoryOfUpload: false
+    };
+  },
+  methods: {
+    /**
+     * Pobiera ajaxem ćwiczenia na podstawie listy id'ków i pushuje je do wspólnej listy.
+     * Dzieje się tak ze względu na to, że drzewko posiada tylko id'ki.
+     * Żeby uzyskać np. nazwę danego ćwiczenia trzeba zaciągnąć ją z serwera.
+     * Mała optymalizacja, bo nie ma sensu pakować wszystkiego za każdym razem do pamięci.
+     * W większości przypadków studenta będzie obchodzić konkretne ćwiczenie a nie wszystkie jednocześnie.
+     * 
+     * @memberof views/student
+     * @param {string[]} ids Lista id'ków ćwiczeń.
+     * @func getExercises
+     */
+    getExercises: function (ids) {
+      this.loadingExercises = true;
+      axios.get("http://localhost:9000/exercise", { params: { ids } }).then(
+        response => {
+          this.loadingExercises = false;
+
+          if (response.data) {
+            response.data.map(exercise => {
+              let savedExercise = this.exercises.find(
+                e => e._id === exercise._id
+              );
+              if (Boolean(savedExercise) === false) {
+                exercise.createdAt = moment(exercise.createdAt)
+                  .locale("pl")
+                  .format("ll");
+                this.exercises.push(exercise);
+              }
+            });
+          }
+        },
+        error => {
+          this.loadingExercises = false;
+          console.log(error);
+        }
+      );
+    },
+    /**
+     * Wydobywa z listy ćwiczenie o konkretnym id.
+     * 
+     * @memberof views/student
+     * @param {string} id Id ćwiczenia.
+     * @func readExerciseById
+     */
+    readExerciseById(id) {
+      return this.exercises.find(v => v._id === id) || {};
+    },
+    /**
+     * Pobiera historię wysyłanych sprawozdań dla wyświetlanego ćwiczenia.
+     * 
+     * @memberof views/student
+     * @func getHistoryOfUpload
+     */
+    getHistoryOfUpload() {
+      this.loadingHistoryOfUpload = true;
+      axios
+        .get("http://localhost:9000/report/history", {
+          params: { exercise: this.exercise._id }
+        })
+        .then(
+          response => {
+            this.loadingHistoryOfUpload = false;
+
+            if (response.data) {
+              // transform date to readable
+              response.data.map(report => {
+                report.createdAt = moment(report.createdAt)
+                  .locale("pl")
+                  .format("lll");
+                return report;
+              });
+              this.historyOfUpload = response.data;
+            }
+          },
+          error => {
+            this.loadingHistoryOfUpload = false;
+            console.log(error);
+          }
+        );
+    },
+    /**
+     * Pobiera załącznik dla wyświetlanego ćwiczenia.
+     * 
+     * @memberof views/student
+     * @func fetchAttachment
+     */
+    fetchAttachment() {
+      window.location = `http://localhost:9000/exercise/file?exercise=${
+        this.exercise._id
+      }`;
+    }
+  },
+  computed: {},
+  watch: {
+    exercise(value) {
+      if (value) this.getHistoryOfUpload();
+    },
+    showExerciseById(value) {
+      if (value) {
+        let exerciseToShow = this.exercises.find(e => e._id === value);
+        this.exercise = exerciseToShow;
+      } else {
+        this.exercise = null;
+      }
+    }
+  }
+};
+&lt;/script>
+
+&lt;style scoped>
+#tree button.card-header {
+  font-size: 0.7rem;
+  overflow: hidden;
+  text-align: left;
+}
+
+#tree .card-body {
+  padding: 0;
+}
+
+.container {
+  max-width: 1300px !important;
+}
+
+header > hr {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+/* #tree .card {
+    border: none !important;
+} */
+&lt;/style></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li></ul><h3>Namespaces</h3><ul><li><a href="middlewares.html">middlewares</a></li><li><a href="routes.html">routes</a></li><li><a href="routes_student.html">routes/student</a></li><li><a href="routes_teacher.html">routes/teacher</a></li><li><a href="services.html">services</a></li><li><a href="utils.html">utils</a></li><li><a href="views_student.html">views/student</a></li></ul><h3>Global</h3><ul><li><a href="global.html#init">init</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jun 13 2018 20:52:32 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

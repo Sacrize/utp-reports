@@ -1,9 +1,12 @@
 // @ts-check
 /**
- * Redirects when user is not logged
+ * Odmawia dostępu jeśli użytkownik nie jest nauczycielem.
+ *
+ * @memberof middlewares
  * @param {object} req
  * @param {object} res
  * @param {object} next
+ * @code {403} Jeśli użytkownik nie jest nauczycielem.
  */
 function isTeacherMiddleware(req, res, next) {
     if (req.session.user.role !== "teacher") {

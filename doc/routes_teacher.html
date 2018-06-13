@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: routes/teacher</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: routes/teacher</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>routes/teacher</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_teacher_teacher.controller.js.html">routes/teacher/teacher.controller.js</a>, <a href="routes_teacher_teacher.controller.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="viewTeacherWithTree"><span class="type-signature">(route) </span>viewTeacherWithTree<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/teacher</td>
+                            </tr>
+                            </table>
+                            Generuje drzewko dla nauczyciela, zależnie od tego dla jakiego wydziału, kierunku i semetru dodał ćwiczenie.
+                            <h5>Response:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">branches</td>
+            <td class="type">Array</td>
+            
+            
+            <td class="description last">Lista wydziałów.</td>
+          </tr><tr>
+            <td class="name">branches[i].name</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Nazwa wydziału</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations</td>
+            <td class="type">Array</td>
+            
+            
+            <td class="description last">Lista kierunków na wydziale UTP</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations[j].name</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Nazwa kierunku</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations[j].typesOfStudy</td>
+            <td class="type">Array</td>
+            
+            
+            <td class="description last">Lista typów studiów danego kierunku na wydziale UTP</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations[j].typesOfStudy[k].name</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Dzienne lub zaoczne</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations[j].typesOfStudy[k].semesters</td>
+            <td class="type">Array</td>
+            
+            
+            <td class="description last">Lista semestrów zależnie od typów studiów danego kierunku na wydziale UTP</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations[j].typesOfStudy[k].semesters[l].name</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Semestr</td>
+          </tr><tr>
+            <td class="name">branches[i].specializations[j].typesOfStudy[k].semesters[l].exercises</td>
+            <td class="type">Array</td>
+            
+            
+            <td class="description last">Lista ćwiczeń</td>
+          </tr><tr>
+            <td class="name">teacher/teacher.vue</td>
+            <td class="type">View</td>
+            
+            
+            <td class="description last"></td>
+          </tr>
+          </table>
+                            <h5>Response Code:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            
+            <td class="type">200</td>
+            
+            
+            <td class="description last">Jeśli wszystko jest ok, zwraca widok</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_teacher_teacher.controller.js.html">routes/teacher/teacher.controller.js</a>, <a href="routes_teacher_teacher.controller.js.html#line19">line 19</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li></ul><h3>Namespaces</h3><ul><li><a href="middlewares.html">middlewares</a></li><li><a href="routes.html">routes</a></li><li><a href="routes_student.html">routes/student</a></li><li><a href="routes_teacher.html">routes/teacher</a></li><li><a href="services.html">services</a></li><li><a href="utils.html">utils</a></li><li><a href="views_student.html">views/student</a></li></ul><h3>Global</h3><ul><li><a href="global.html#init">init</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jun 13 2018 20:52:33 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
