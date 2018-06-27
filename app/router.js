@@ -13,11 +13,6 @@ const expressVue = require("express-vue");
 const path = require("path");
 const mongoose = require("mongoose");
 
-/**
- *
- * @param {object} app
- * @param {object} config
- */
 module.exports.init = (app, config) => {
   //Setup
   const env = process.env.NODE_ENV || "development";
@@ -108,7 +103,6 @@ module.exports.init = (app, config) => {
 
   app.use("/", router);
 
-  /** @namespace routes */
   let controllers = glob.sync(config.root + "/routes/**/*.js");
   controllers.forEach(function(controller) {
     module.require(controller)(router);

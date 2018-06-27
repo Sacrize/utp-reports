@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: routes/exercise</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: routes/exercise</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>routes/exercise</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_exercise_exercise.controller.js.html">routes/exercise/exercise.controller.js</a>, <a href="routes_exercise_exercise.controller.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="getExercisesByIds"><span class="type-signature">(route) </span>getExercisesByIds<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/exercise</td>
+                            </tr>
+                            </table>
+                            Zwraca ćwiczenia dla podanej listy id.
+                            <h5>Query Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">ids</td>
+            <td class="type">Array</td>
+            
+            
+            <td class="description last">Lista z id'kami ćwiczeń.</td>
+          </tr>
+          </table>
+                            <h5>Response Code:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            
+            <td class="type">200</td>
+            
+            
+            <td class="description last">Zwraca json z ćwiczeniami.</td>
+          </tr><tr>
+            
+            <td class="type">400</td>
+            
+            
+            <td class="description last">Jeśli ids nie jest listą.</td>
+          </tr><tr>
+            
+            <td class="type">500</td>
+            
+            
+            <td class="description last">Jak coś pójdzie nie tak.</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_exercise_exercise.controller.js.html">routes/exercise/exercise.controller.js</a>, <a href="routes_exercise_exercise.controller.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="getFileByExerciseId"><span class="type-signature">(route) </span>getFileByExerciseId<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/exercise/file</td>
+                            </tr>
+                            </table>
+                            Zwraca ćwiczenia dla podanej listy id.
+                            <h5>Query Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">exercise</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Id ćwiczenia, z którego chcemy pobrać plik.</td>
+          </tr>
+          </table>
+                            <h5>Response Code:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            
+            <td class="type">200</td>
+            
+            
+            <td class="description last">Jeśli wszystko ok.</td>
+          </tr><tr>
+            
+            <td class="type">400</td>
+            
+            
+            <td class="description last">Jeśli id ćwiczenia jest błędne.</td>
+          </tr><tr>
+            
+            <td class="type">404</td>
+            
+            
+            <td class="description last">Jeśli nie znajdzie pliku.</td>
+          </tr><tr>
+            
+            <td class="type">500</td>
+            
+            
+            <td class="description last">Jak coś pójdzie nie tak.</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_exercise_exercise.controller.js.html">routes/exercise/exercise.controller.js</a>, <a href="routes_exercise_exercise.controller.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="insertExercise"><span class="type-signature">(route) </span>insertExercise<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">POST</td>
+                            <td class="name last">/exercise</td>
+                            </tr>
+                            </table>
+                            Interfejs do dodawania ćwiczeń. Antywirus skanuje załącznik.
+                            <h5>Body Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">name</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Nazwa.</td>
+          </tr><tr>
+            <td class="name">description</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Opis.</td>
+          </tr><tr>
+            <td class="name">branch</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Wydział UTP.</td>
+          </tr><tr>
+            <td class="name">specialization</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Kierunek studiów.</td>
+          </tr><tr>
+            <td class="name">typeOfStudy</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Dzienny czy zaoczny.</td>
+          </tr><tr>
+            <td class="name">semester</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Semestr.</td>
+          </tr><tr>
+            <td class="name">attachment</td>
+            <td class="type">File</td>
+            
+            
+            <td class="description last">Załącznik. Może to być np. rozszerzony opis ćwiczenia.</td>
+          </tr>
+          </table>
+                            <h5>Response:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">Exercise</td>
+            <td class="type">Object</td>
+            
+            
+            <td class="description last">Dodane ćwiczenie do bazy danych.</td>
+          </tr><tr>
+            <td class="name">Exercise._id</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Id.</td>
+          </tr><tr>
+            <td class="name">Exercise.name</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Nazwa.</td>
+          </tr><tr>
+            <td class="name">Exercise.description</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Opis.</td>
+          </tr><tr>
+            <td class="name">Exercise.branch</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Wydział UTP.</td>
+          </tr><tr>
+            <td class="name">Exercise.specialization</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Kierunek studiów.</td>
+          </tr><tr>
+            <td class="name">Exercise.typeOfStudy</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Dzienne czy zaoczne.</td>
+          </tr><tr>
+            <td class="name">Exercise.semester</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Semestr.</td>
+          </tr><tr>
+            <td class="name">Exercise.owner</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Id nauczyciela, do którego należy ćwiczenie.</td>
+          </tr><tr>
+            <td class="name">Exercise.file</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Id pliku zapisanego w gridfs.</td>
+          </tr>
+          </table>
+                            <h5>Response Code:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            
+            <td class="type">200</td>
+            
+            
+            <td class="description last">Jeśli doda ćwiczenie do bazy danych.</td>
+          </tr><tr>
+            
+            <td class="type">500</td>
+            
+            
+            <td class="description last">Jak coś pójdzie nie tak lub plik będzie zawirusowany.</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_exercise_exercise.controller.js.html">routes/exercise/exercise.controller.js</a>, <a href="routes_exercise_exercise.controller.js.html#line112">line 112</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li></ul><h3>Namespaces</h3><ul><li><a href="components_createExercise.html">components/createExercise</a></li><li><a href="components_uploadReport.html">components/uploadReport</a></li><li><a href="middlewares.html">middlewares</a></li><li><a href="routes_auth.html">routes/auth</a></li><li><a href="routes_exercise.html">routes/exercise</a></li><li><a href="routes_reports.html">routes/reports</a></li><li><a href="routes_school.html">routes/school</a></li><li><a href="routes_student.html">routes/student</a></li><li><a href="routes_teacher.html">routes/teacher</a></li><li><a href="services.html">services</a></li><li><a href="utils.html">utils</a></li><li><a href="views_auth.html">views/auth</a></li><li><a href="views_student.html">views/student</a></li><li><a href="views_teacher.html">views/teacher</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jun 14 2018 17:56:24 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

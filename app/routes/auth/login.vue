@@ -7,6 +7,8 @@
 </template>
 
 <script>
+/** @namespace views/auth */
+
 export default {
     data: function () {
         return {

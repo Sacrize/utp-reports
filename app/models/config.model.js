@@ -5,12 +5,12 @@ class Config {
     /**
      * Model konfiguracji aplikacji.
      * @constructor
-     * @prop {String} env
-     * @prop {String} root
-     * @prop {String} rootPath
-     * @prop {Object} app
-     * @prop {Number} port
-     * @prop {Object} clamscan
+     * @prop {String} env Środowisko konfiguracyjne production/development/stagging
+     * @prop {String} root Ścieżka od obecnego katalogu
+     * @prop {String} rootPath Ścieżka od roota
+     * @prop {Object} app Konfiguracja aplikacji
+     * @prop {Number} port Port, na którym nasłuchuje web server
+     * @prop {Object} clamscan Konfiguracja antywirusa
      */
     constructor() {
         this.env = process.env.NODE_ENV || "development";

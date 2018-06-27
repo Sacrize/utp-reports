@@ -18,17 +18,12 @@
 
 <script>
 export default {
-  props: {
-    
-  },
+  props: {},
   data: function() {
-    return {
-      
-    };
+    return {};
   }
 };
 </script>
 
 <style lang="css">
-
 </style>

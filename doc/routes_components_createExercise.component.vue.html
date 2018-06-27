@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/components/createExercise.component.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/components/createExercise.component.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+&lt;div class="modal fade" id="createExerciseModal" tabindex="-1" role="dialog">
+  &lt;div class="modal-dialog" role="document">
+    &lt;div class="modal-content">
+      &lt;div class="modal-header">
+        &lt;h5 class="modal-title">Dodaj ćwiczenie&lt;/h5>
+        &lt;button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          &lt;span aria-hidden="true">&amp;times;&lt;/span>
+        &lt;/button>
+      &lt;/div>
+      &lt;div class="modal-body">
+        &lt;div class="alert alert-warning" v-if="loading">
+          &lt;img src="/assets/loader.svg" /> Trwa dodawanie, poczekaj jeszcze chwilę.
+        &lt;/div>
+        &lt;div class="alert alert-success" v-else-if="status === 'success'">
+          Ćwiczenie zostało dodane pomyślnie.
+        &lt;/div>
+        &lt;div class="alert alert-danger" v-else-if="status === 'error'">
+          Coś poszło nie tak.
+        &lt;/div>
+        &lt;form v-on:submit.prevent="onSubmit">
+          &lt;div class="form-group">
+            &lt;label for="nameOfExercise">Nazwa&lt;/label>
+            &lt;input type="text" class="form-control" id="nameOfExercise" placeholder="np. Ćwiczenie 1" v-model="exercise.name">
+          &lt;/div>
+          &lt;div class="form-group">
+            &lt;label for="descriptionOfExercise">Opis&lt;/label>
+            &lt;textarea class="form-control" id="descriptionOfExercise" rows="3" v-model="exercise.description">&lt;/textarea>
+          &lt;/div>
+          &lt;div class="form-group">
+            &lt;label for="attachmentOfExercise">Załącznik&lt;/label>
+            &lt;input type="file" class="form-control-file" id="attachmentOfExercise" v-on:change="processFile($event)">
+          &lt;/div>
+          &lt;hr />
+          &lt;div class="card">
+            &lt;button type="button" class="card-header" data-toggle="collapse" href="#classCollapse">
+              Wybierz kogo ma dotyczyć to ćwiczenie.
+            &lt;/button>
+            &lt;div class="card-body collapse" id="classCollapse">
+              &lt;div class="form-group">
+                &lt;label>Wydział&lt;/label>
+                &lt;select class="form-control" v-on:click="getBranches" v-model="exercise.branch">
+                  &lt;option v-for="branch in branches" v-bind:key="branch" v-bind:value="branch">
+                    {{ branch }}
+                  &lt;/option>
+                &lt;/select>
+              &lt;/div>
+              &lt;div class="form-group" v-show="exercise.branch">
+                &lt;label>Kierunek&lt;/label>
+                &lt;select class="form-control" v-on:click="getSpecializations" v-model="exercise.specialization">
+                  &lt;option v-for="specialization in specializations" v-bind:key="specialization" v-bind:value="specialization">
+                    {{ specialization }}
+                  &lt;/option>
+                &lt;/select>
+              &lt;/div>
+              &lt;div class="form-group" v-show="exercise.specialization">
+                &lt;label>Rodzaj studiów&lt;/label>
+                &lt;select class="form-control" v-on:click="getTypesOfStudy" v-model="exercise.typeOfStudy">
+                  &lt;option v-for="typeOfStudy in typesOfStudy" v-bind:key="typeOfStudy" v-bind:value="typeOfStudy">
+                    {{ typeOfStudy }}
+                  &lt;/option>
+                &lt;/select>
+              &lt;/div>
+              &lt;div class="form-group" v-show="exercise.typeOfStudy">
+                &lt;label>Semestr&lt;/label>
+                &lt;select class="form-control" v-on:click="getSemesters" v-model="exercise.semester">
+                  &lt;option v-for="semester in semesters" v-bind:key="semester" v-bind:value="semester">
+                    {{ semester }}
+                  &lt;/option>
+                &lt;/select>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;hr />
+          &lt;button type="submit" class="btn btn-primary">Zapisz&lt;/button>
+          &lt;button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj&lt;/button>
+        &lt;/form>
+      &lt;/div>
+    &lt;/div>
+  &lt;/div>
+&lt;/div>
+&lt;/template>
+
+&lt;script>
+/** 
+ * @namespace components/createExercise 
+ * */
+
+export default {
+  props: {},
+    /** 
+     * @memberof components/createExercise
+     * @param {object} exercise Obiekt tworzonego ćwiczenia
+     * @param {string[]} branches Lista wydziałów UTP
+     * @param {string[]} specializations Lista kierunków dla wydziału
+     * @param {string[]} typesOfStudy Lista typów dzienne/zaoczne dla kierunku
+     * @param {string[]} semesters Lista semestrów dla typu
+     * @param {string} status Rezultat ostatniego ajaxa success/error
+     * @param {boolean} loading W trakcie pobierania danych ajaxem lub nie
+     */
+  data: function() {
+    return {
+      exercise: {},
+      branches: Array(),
+      specializations: Array(),
+      typesOfStudy: Array(),
+      semesters: Array(),
+      status: null,
+      loading: false
+    };
+  },
+  methods: {
+    /**
+     * Handler do zapisu załącznika z formularza do obiektu ćwiczenia
+     * 
+     * @memberof components/createExercise
+     * @param {object} event Event obj
+     * @func processFile
+     */
+    processFile(event) {
+      this.exercise.attachment = event.target.files[0];
+    },
+    /**
+     * Wysyłka nowego ćwiczenia do zapisu na serwer
+     * 
+     * @memberof components/createExercise
+     * @body {string} name Nazwa ćwiczenia
+     * @body {string} description Opis
+     * @body {file} attachment Załącznik, np. zip z materiałami
+     * @body {string} branch Wydział UTP
+     * @body {string} specialization Kierunek
+     * @body {string} typeOfStudy Typ dzienne/zaoczne
+     * @body {string} semester Semestr
+     * @func onSubmit
+     */
+    onSubmit() {
+      let fd = new FormData();
+
+      fd.append("name", this.exercise.name);
+      fd.append("description", this.exercise.description);
+      fd.append("attachment", this.exercise.attachment);
+      fd.append("branch", this.exercise.branch);
+      fd.append("specialization", this.exercise.specialization);
+      fd.append("typeOfStudy", this.exercise.typeOfStudy);
+      fd.append("semester", this.exercise.semester);
+
+      this.loading = true;
+
+      axios.post("http://localhost:9000/exercise", fd).then(
+        response => {
+          this.loading = false;
+          this.status = "success";
+          this.resetForm();
+        },
+        error => {
+          this.loading = false;
+          this.status = "error";
+        }
+      );
+    },
+    resetForm() {
+      this.exercise = {};
+      this.$el.getElementsByTagName("form")[0].reset();
+    },
+    getBranches() {
+      axios.get("http://localhost:9000/school/branches").then(
+        response => {
+          this.branches = response.data || Array();
+          this.exercise.specialization = null;
+          this.exercise.typeOfStudy = null;
+          this.exercise.semester = null;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
+    getSpecializations() {
+      axios
+        .get("http://localhost:9000/school/specializations", {
+          params: { branch: this.exercise.branch }
+        })
+        .then(
+          response => {
+            this.specializations = response.data || Array();
+            this.exercise.typeOfStudy = null;
+            this.exercise.semester = null;
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    },
+    getTypesOfStudy() {
+      axios
+        .get("http://localhost:9000/school/typesofstudy", {
+          params: {
+            branch: this.exercise.branch,
+            specialization: this.exercise.specialization
+          }
+        })
+        .then(
+          response => {
+            this.typesOfStudy = response.data || Array();
+            this.exercise.semester = null;
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    },
+    getSemesters() {
+      axios
+        .get("http://localhost:9000/school/semesters", {
+          params: {
+            branch: this.exercise.branch,
+            specialization: this.exercise.specialization,
+            typesOfStudy: this.exercise.typeOfStudy
+          }
+        })
+        .then(
+          response => {
+            this.semesters = response.data || Array();
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+  }
+};
+&lt;/script>
+
+&lt;style lang="css" scoped>
+button.card-header {
+  text-align: left;
+}
+img {
+  width: 16px;
+  margin-top: -2px;
+}
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li></ul><h3>Namespaces</h3><ul><li><a href="components_createExercise.html">components/createExercise</a></li><li><a href="components_uploadReport.html">components/uploadReport</a></li><li><a href="middlewares.html">middlewares</a></li><li><a href="routes_auth.html">routes/auth</a></li><li><a href="routes_exercise.html">routes/exercise</a></li><li><a href="routes_reports.html">routes/reports</a></li><li><a href="routes_school.html">routes/school</a></li><li><a href="routes_student.html">routes/student</a></li><li><a href="routes_teacher.html">routes/teacher</a></li><li><a href="services.html">services</a></li><li><a href="utils.html">utils</a></li><li><a href="views_auth.html">views/auth</a></li><li><a href="views_student.html">views/student</a></li><li><a href="views_teacher.html">views/teacher</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jun 14 2018 17:56:24 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

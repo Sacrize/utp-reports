@@ -1,4 +1,5 @@
 //@ts-check
+/** @namespace routes/exercise */
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const Exercise = mongoose.model("Exercise");
@@ -23,7 +24,7 @@ module.exports = (router) => {
    * Zwraca ćwiczenia dla podanej listy id.
    *
    * @name getExercisesByIds
-   * @memberof routes
+   * @memberof routes/exercise
    * @path {GET} /exercise
    * @query {Array} ids Lista z id'kami ćwiczeń.
    * @code {200} Zwraca json z ćwiczeniami.
@@ -55,7 +56,7 @@ module.exports = (router) => {
    * Zwraca ćwiczenia dla podanej listy id.
    *
    * @name getFileByExerciseId
-   * @memberof routes
+   * @memberof routes/exercise
    * @path {GET} /exercise/file
    * @query {String} exercise Id ćwiczenia, z którego chcemy pobrać plik.
    * @code {200} Jeśli wszystko ok.
@@ -112,7 +113,7 @@ module.exports = (router) => {
    * Interfejs do dodawania ćwiczeń. Antywirus skanuje załącznik.
    *
    * @name insertExercise
-   * @memberof routes
+   * @memberof routes/exercise
    * @path {POST} /exercise
    * @body {String} name Nazwa.
    * @body {String} description Opis.

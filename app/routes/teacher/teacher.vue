@@ -126,6 +126,8 @@
 </template>
 
 <script>
+/** @namespace views/teacher */
+
 import navbar from "../navbar.vue";
 import createExercise from "../components/createExercise.component.vue";
 export default {

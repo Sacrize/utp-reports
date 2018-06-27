@@ -1,4 +1,5 @@
 //@ts-check
+/** @namespace routes/auth */
 
 /**
  * Auth Contoller
@@ -9,7 +10,7 @@ module.exports = (router) => {
    * Tymczasowo zapisuje do sesji statyczne dane, identyfikując użytkownika jako studenta lub nauczyciela.
    *
    * @name login
-   * @memberof routes
+   * @memberof routes/auth
    * @path {GET} /login
    * @query {String} role Klasyfikuje użytkownika jako studenta lub nauczyciela.
    * @code {301} Przekieruje do właściwego modułu w przypadku poprawnego zalogowania.
@@ -58,7 +59,7 @@ module.exports = (router) => {
    * Wylogowanie z konta. Tymczasowo, tylko usuwa dane z sesji.
    *
    * @name logout
-   * @memberof routes
+   * @memberof routes/auth
    * @path {GET} /logout
    * @code {301} Przekieruje do widoku logowania.
    */

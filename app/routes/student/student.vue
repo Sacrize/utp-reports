@@ -191,7 +191,7 @@ export default {
       );
     },
     /**
-     * Wydobywa z listy ćwiczenie o konkretnym id.
+     * Wydobywa z listy ćwiczeń obiekt o konkretnym id.
      * 
      * @memberof views/student
      * @param {string} id Id ćwiczenia.

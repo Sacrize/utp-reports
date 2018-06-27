@@ -23,16 +23,16 @@ module.exports = (router) => {
    * @memberof routes/student
    * @path {GET} /student
    * @code {200} Jeśli wszystko jest ok, zwraca widok
-   * @response {Array} branches Lista wydziałów.
-   * @response {String} branches[i].name Nazwa wydziału
-   * @response {Array} branches[i].specializations Lista kierunków na wydziale UTP
-   * @response {String} branches[i].specializations[j].name Nazwa kierunku
-   * @response {Array} branches[i].specializations[j].typesOfStudy Lista typów studiów danego kierunku na wydziale UTP
-   * @response {String} branches[i].specializations[j].typesOfStudy[k].name Dzienne lub zaoczne
-   * @response {Array} branches[i].specializations[j].typesOfStudy[k].semesters Lista semestrów zależnie od typów studiów danego kierunku na wydziale UTP
-   * @response {String} branches[i].specializations[j].typesOfStudy[k].semesters[l].name Semestr
-   * @response {Array} branches[i].specializations[j].typesOfStudy[k].semesters[l].exercises Lista ćwiczeń
-   * @response {View} student/student.vue
+   * @response {object[]} branches Lista wydziałów.
+   * @response {string} branches[i].name Nazwa wydziału
+   * @response {object[]} branches[i].specializations Lista kierunków na wydziale UTP
+   * @response {string} branches[i].specializations[j].name Nazwa kierunku
+   * @response {object[]} branches[i].specializations[j].typesOfStudy Lista typów studiów danego kierunku na wydziale UTP
+   * @response {string} branches[i].specializations[j].typesOfStudy[k].name Dzienne lub zaoczne
+   * @response {object[]} branches[i].specializations[j].typesOfStudy[k].semesters Lista semestrów zależnie od typów studiów danego kierunku na wydziale UTP
+   * @response {string} branches[i].specializations[j].typesOfStudy[k].semesters[l].name Semestr
+   * @response {object[]} branches[i].specializations[j].typesOfStudy[k].semesters[l].exercises Lista ćwiczeń
+   * @response {view} student/student.vue
    */
   router.get("/student",
     isAuthenticated,

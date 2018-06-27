@@ -37,7 +37,9 @@
 </template>
 
 <script>
-
+/** 
+ * @namespace components/uploadReport 
+ * */
 export default {
   props: {
     exercise: {

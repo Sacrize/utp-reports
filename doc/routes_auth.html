@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: routes/student</title>
+    <title>JSDoc: Namespace: routes/auth</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Namespace: routes/student</h1>
+    <h1 class="page-title">Namespace: routes/auth</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>routes/student</h2>
+        <h2>routes/auth</h2>
         
     
 </header>
@@ -70,7 +70,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_student_student.controller.js.html">routes/student/student.controller.js</a>, <a href="routes_student_student.controller.js.html#line2">line 2</a>
+        <a href="routes_auth_auth.controller.js.html">routes/auth/auth.controller.js</a>, <a href="routes_auth_auth.controller.js.html#line2">line 2</a>
     </li></ul></dd>
     
 
@@ -103,7 +103,7 @@
 
         
             
-<h4 class="name" id="viewStudentWithTree"><span class="type-signature">(route) </span>viewStudentWithTree<span class="type-signature"></span></h4>
+<h4 class="name" id="login"><span class="type-signature">(route) </span>login<span class="type-signature"></span></h4>
 
 
 
@@ -114,11 +114,11 @@
                             <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
                             <tr>
                             <td class="type">GET</td>
-                            <td class="name last">/student</td>
+                            <td class="name last">/login</td>
                             </tr>
                             </table>
-                            Generuje drzewko dla studenta, zależnie od tego na jakim jest wydziale, kierunku i semestrze.
-                            <h5>Response:</h5>
+                            Tymczasowo zapisuje do sesji statyczne dane, identyfikując użytkownika jako studenta lub nauczyciela.
+                            <h5>Query Parameters:</h5>
           <table class="params">
             <thead>
               <tr>
@@ -130,65 +130,11 @@
               </tr>
             </thead>
             <tr>
-            <td class="name">branches</td>
-            <td class="type">Array.<object></td>
+            <td class="name">role</td>
+            <td class="type">String</td>
             
             
-            <td class="description last">Lista wydziałów.</td>
-          </tr><tr>
-            <td class="name">branches[i].name</td>
-            <td class="type">string</td>
-            
-            
-            <td class="description last">Nazwa wydziału</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations</td>
-            <td class="type">Array.<object></td>
-            
-            
-            <td class="description last">Lista kierunków na wydziale UTP</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations[j].name</td>
-            <td class="type">string</td>
-            
-            
-            <td class="description last">Nazwa kierunku</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations[j].typesOfStudy</td>
-            <td class="type">Array.<object></td>
-            
-            
-            <td class="description last">Lista typów studiów danego kierunku na wydziale UTP</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations[j].typesOfStudy[k].name</td>
-            <td class="type">string</td>
-            
-            
-            <td class="description last">Dzienne lub zaoczne</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations[j].typesOfStudy[k].semesters</td>
-            <td class="type">Array.<object></td>
-            
-            
-            <td class="description last">Lista semestrów zależnie od typów studiów danego kierunku na wydziale UTP</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations[j].typesOfStudy[k].semesters[l].name</td>
-            <td class="type">string</td>
-            
-            
-            <td class="description last">Semestr</td>
-          </tr><tr>
-            <td class="name">branches[i].specializations[j].typesOfStudy[k].semesters[l].exercises</td>
-            <td class="type">Array.<object></td>
-            
-            
-            <td class="description last">Lista ćwiczeń</td>
-          </tr><tr>
-            <td class="name">student/student.vue</td>
-            <td class="type">view</td>
-            
-            
-            <td class="description last"></td>
+            <td class="description last">Klasyfikuje użytkownika jako studenta lub nauczyciela.</td>
           </tr>
           </table>
                             <h5>Response Code:</h5>
@@ -204,10 +150,16 @@
             </thead>
             <tr>
             
-            <td class="type">200</td>
+            <td class="type">301</td>
             
             
-            <td class="description last">Jeśli wszystko jest ok, zwraca widok</td>
+            <td class="description last">Przekieruje do właściwego modułu w przypadku poprawnego zalogowania.</td>
+          </tr><tr>
+            
+            <td class="type">400</td>
+            
+            
+            <td class="description last">Zwróci widok logowania jeśli nie uda się zalogować.</td>
           </tr>
           </table>
 </div>
@@ -247,7 +199,96 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_student_student.controller.js.html">routes/student/student.controller.js</a>, <a href="routes_student_student.controller.js.html#line19">line 19</a>
+        <a href="routes_auth_auth.controller.js.html">routes/auth/auth.controller.js</a>, <a href="routes_auth_auth.controller.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="logout"><span class="type-signature">(route) </span>logout<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/logout</td>
+                            </tr>
+                            </table>
+                            Wylogowanie z konta. Tymczasowo, tylko usuwa dane z sesji.
+                            <h5>Response Code:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            
+            <td class="type">301</td>
+            
+            
+            <td class="description last">Przekieruje do widoku logowania.</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_auth_auth.controller.js.html">routes/auth/auth.controller.js</a>, <a href="routes_auth_auth.controller.js.html#line58">line 58</a>
     </li></ul></dd>
     
 

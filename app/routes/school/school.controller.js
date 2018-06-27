@@ -1,4 +1,5 @@
 //@ts-check
+/** @namespace routes/school */
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const {
@@ -30,7 +31,7 @@ module.exports = (router) => {
    * Zwraca listę wszystkich wydziałów UTP. Na razie ze statycznej listy.
    *
    * @name getSchoolBranches
-   * @memberof routes
+   * @memberof routes/school
    * @path {GET} /school/branches
    * @code {200} Jeśli wszystko jest ok.
    * @response {Array} branches Lista wydziałów z unikatowymi elementami (string).
@@ -50,7 +51,7 @@ module.exports = (router) => {
    * Zwraca listę wszystkich kierunków na wydziale UTP.
    *
    * @name getSchoolSpecializations
-   * @memberof routes
+   * @memberof routes/school
    * @path {GET} /school/specializations
    * @query {String} branch Wydział UTP.
    * @code {200} Jeśli wszystko jest ok.
@@ -78,8 +79,8 @@ module.exports = (router) => {
   /**
    * Zwraca listę wszystkich typów studiów danego kierunku na wydziale UTP.
    *
-   * @name getSchoolTypeOfStudy
-   * @memberof routes
+   * @name getSchoolTypesOfStudy
+   * @memberof routes/school
    * @path {GET} /school/typesofstudy
    * @query {String} branch Wydział UTP.
    * @query {String} specialization Kierunek na wydziale UTP.
@@ -114,8 +115,8 @@ module.exports = (router) => {
   /**
    * Zwraca listę wszystkich semestrów zależnie od typów studiów danego kierunku na wydziale UTP.
    *
-   * @name getSchoolTypeOfStudy
-   * @memberof routes
+   * @name getSchoolSemesters
+   * @memberof routes/school
    * @path {GET} /school/semesters
    * @query {String} branch Wydział UTP.
    * @query {String} specialization Kierunek na wydziale UTP.

@@ -1,4 +1,6 @@
 //@ts-check
+/** @namespace routes/reports */
+
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const Report = mongoose.model("Report");
