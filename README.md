@@ -1,22 +1,22 @@
-# Express-Vue MVC Starter Kit
+# UTP Sprawozdania
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/express-vue/express-vue-mvc-starter.svg)](https://greenkeeper.io/)
-
-This is a simple basic starter kit to use Express-Vue
-
-Documentation is at [express-vue/express-vue](https://github.com/express-vue/express-vue)
+Mała aplikacja z 2-ma modułami, dla studenta i dla nauczyciela do zarządzania sprawozdaniami.
 
 
-**To use this**
+### Opis
 
-Copy this repo, change the package.json, and go through the router.js file and change the settings for your cookie session storage.
+Nauczyciel dodaje ćwiczenia odnośnie konkretnej grupy studentów. Oni zaś realizują je i uploadują sprawozdania.
+Sprawozdania w postaci plików są skanowane przez antywirus (clamav) i wrzucane do GridFS w MongoDB.
 
-To Run
+Dokumentacja podstawki [express-vue/express-vue](https://github.com/express-vue/express-vue)
 
-1. `npm install`
-2. `npm start`
+### Uruchomienie
 
-**Building and Running in prod**
+Aplikacja wymaga połączenia z MongoDB i ClamAV. Całość skonfigurowana jest dzięki docker-compose.
+Wystarczy odpalić poleceniem:
 
-1. `ENV=production node app`
+```sh
+$ docker-compose up -d
+```
 
+Aplikacja działa na porcie 9000.
