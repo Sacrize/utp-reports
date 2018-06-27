@@ -59,6 +59,7 @@
     "exclude": [
         "app/assets/**/*.js",
         "test/**",
-        "app/**/*.vue"
+        "app/**/*.vue",
+        "app/**/**/*.vue",
     ]
 }
