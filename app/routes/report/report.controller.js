@@ -19,6 +19,16 @@ const multiparty = require("connect-multiparty")();
  * @param {object} router
  */
 module.exports = (router) => {
+  /**
+   * Zwraca sprawozdania.
+   * @name getReportsByExercise
+   * @memberof routes/exercise
+   * @path {GET} /report
+   * @query {String} exercise ćwiczenie z którego chcemy sprawozdania.
+   * @code {200} Zwraca json z sprawozdaniami.
+   * @code {400} Jeśli cwiczenie nie jest String.
+   * @code {500} Jak coś pójdzie nie tak.
+   */
   router.get("/report",
     isAuthenticated,
     isTeacher,
@@ -52,6 +62,17 @@ module.exports = (router) => {
       }
     },
   );
+  /**
+   * Zwraca historie sprawozdania.
+   *
+   * @name getHistoryByReportExercise
+   * @memberof routes/report
+   * @path {GET} /report/history
+   * @query {String} exercise ćwiczenie z którego chcemy historie.
+   * @code {200} Jesli wszystko jest ok.
+   * @code {400} Jeśli nie jest String.
+   * @code {500} Jeśli coś pójdzie nie tak.
+   */
   router.get("/report/history",
     isAuthenticated,
     isStudent,
@@ -84,6 +105,21 @@ module.exports = (router) => {
       }
     },
   );
+  /**
+   * Dodawanie sprawozdania.
+   * 
+   * @name insertReport
+   * @memberof routes/report
+   * @path {POST} /report
+   * @body {String} exercise Ćwiczenie.
+   * @response {Object} Report Dodano sprawozdanie do bazy
+   * response {String} Report._id Id.
+   * response {String} Report.studentName Imie studenta.
+   * response {String} Report.studentIndex Id studenta.
+   * response {String} Report.exercise Nazwa cwiczenia
+   * @code {200} Jeśli doda sprawozdanie do bazy.
+   * @code {500} Jeśli coś pójdzie nie tak.
+   */
   router.post("/report",
     isAuthenticated,
     isStudent,
@@ -129,6 +165,19 @@ module.exports = (router) => {
       }
     },
   );
+
+  /**
+   * Przypisanie statusu sprawozdania, z powodem jeśli odrzucone.
+   * 
+   * @name setReportStatus
+   * @memberof routes/report
+   * @path {PATCH} /reports/:id
+   * @body {String} status Status sprawozdania
+   * @body {String} reason Powod odrzucenia sprawozdania, jeśli jest odrzucone.
+   * @code {200} Jeśli wszystko ok.
+   * @code {400} Jeśli id sprawozdania jest błędne
+   * @code {500} Jak coś pójdzie nie tak.
+   */
   router.patch("/reports/:id",
     isAuthenticated,
     isTeacher,
