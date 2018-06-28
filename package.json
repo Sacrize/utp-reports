@@ -113,7 +113,7 @@
         "time-grunt": "^1.2.1",
         "tslint": "^5.10.0",
         "typescript": "^2.8.3",
-        "uuid": "^3.2.1",
+        "uuid": "^3.3.0",
         "vue-template-compiler": "^2.5.16"
     },
     "main": "index.js",
